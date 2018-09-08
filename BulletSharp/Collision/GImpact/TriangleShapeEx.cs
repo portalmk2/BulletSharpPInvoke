@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class GimTriangleContact : IDisposable
@@ -28,12 +35,12 @@ namespace BulletSharp
 			GIM_TRIANGLE_CONTACT_copy_from(Native, other.Native);
 		}
 		/*
-		public void MergePoints(Vector4 plane, float margin, Vector3 points, int pointCount)
+		public void MergePoints(Vector4 plane, Scalar margin, Vector3 points, int pointCount)
 		{
 			GIM_TRIANGLE_CONTACT_merge_points(Native, ref plane, margin, ref points, pointCount);
 		}
 		*/
-		public float PenetrationDepth
+		public Scalar PenetrationDepth
 		{
 			get => GIM_TRIANGLE_CONTACT_getPenetration_depth(Native);
 			set => GIM_TRIANGLE_CONTACT_setPenetration_depth(Native, value);
@@ -123,13 +130,13 @@ namespace BulletSharp
 			return btPrimitiveTriangle_overlap_test_conservative(Native, other.Native);
 		}
 
-		public float Dummy
+		public Scalar Dummy
 		{
 			get => btPrimitiveTriangle_getDummy(Native);
 			set => btPrimitiveTriangle_setDummy(Native, value);
 		}
 
-		public float Margin
+		public Scalar Margin
 		{
 			get => btPrimitiveTriangle_getMargin(Native);
 			set => btPrimitiveTriangle_setMargin(Native, value);

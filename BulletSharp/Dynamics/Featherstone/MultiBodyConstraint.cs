@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class MultiBodyConstraint : IDisposable
@@ -36,32 +43,32 @@ namespace BulletSharp
 			btMultiBodyConstraint_finalizeMultiDof(Native);
 		}
 
-		public float GetAppliedImpulse(int dof)
+		public Scalar GetAppliedImpulse(int dof)
 		{
 			return btMultiBodyConstraint_getAppliedImpulse(Native, dof);
 		}
 
-		public float GetPosition(int row)
+		public Scalar GetPosition(int row)
 		{
 			return btMultiBodyConstraint_getPosition(Native, row);
 		}
 
-		public void InternalSetAppliedImpulse(int dof, float appliedImpulse)
+		public void InternalSetAppliedImpulse(int dof, Scalar appliedImpulse)
 		{
 			btMultiBodyConstraint_internalSetAppliedImpulse(Native, dof, appliedImpulse);
 		}
 		/*
-		public float JacobianA(int row)
+		public Scalar JacobianA(int row)
 		{
 			return btMultiBodyConstraint_jacobianA(Native, row);
 		}
 
-		public float JacobianB(int row)
+		public Scalar JacobianB(int row)
 		{
 			return btMultiBodyConstraint_jacobianB(Native, row);
 		}
 		*/
-		public void SetPosition(int row, float pos)
+		public void SetPosition(int row, Scalar pos)
 		{
 			btMultiBodyConstraint_setPosition(Native, row, pos);
 		}
@@ -77,7 +84,7 @@ namespace BulletSharp
 
 		public bool IsUnilateral => btMultiBodyConstraint_isUnilateral(Native);
 
-		public float MaxAppliedImpulse
+		public Scalar MaxAppliedImpulse
 		{
 			get => btMultiBodyConstraint_getMaxAppliedImpulse(Native);
 			set => btMultiBodyConstraint_setMaxAppliedImpulse(Native, value);

@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum GImpactShapeType
@@ -273,7 +280,7 @@ namespace BulletSharp
 			set => btGImpactMeshShapePart_TrimeshPrimitiveManager_setLock_count(Native, value);
 		}
 
-		public float Margin
+		public Scalar Margin
 		{
 			get => btGImpactMeshShapePart_TrimeshPrimitiveManager_getMargin(Native);
 			set => btGImpactMeshShapePart_TrimeshPrimitiveManager_setMargin(Native, value);
@@ -452,7 +459,7 @@ namespace BulletSharp
 		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
 		public Vector3FloatData LocalScaling;
-		public float CollisionMargin;
+		public Scalar CollisionMargin;
 		public int GImpactSubType;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GImpactMeshShapeData), fieldName).ToInt32(); }

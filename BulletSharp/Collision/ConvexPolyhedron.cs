@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class Face : IDisposable
@@ -77,14 +84,14 @@ namespace BulletSharp
 			btConvexPolyhedron_initialize2(Native);
 		}
 
-		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out Scalar minProj, out Scalar maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,
 				out maxProj, out witnesPtMin, out witnesPtMax);
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
+		public void Project(Matrix trans, Vector3 dir, out Scalar minProj, out Scalar maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,
@@ -145,7 +152,7 @@ namespace BulletSharp
 			set => btConvexPolyhedron_setME(Native, ref value);
 		}
 
-		public float Radius
+		public Scalar Radius
 		{
 			get => btConvexPolyhedron_getRadius(Native);
 			set => btConvexPolyhedron_setRadius(Native, value);

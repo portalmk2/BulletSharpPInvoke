@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class MlcpSolverInterface : IDisposable
@@ -12,8 +19,8 @@ namespace BulletSharp
 			Native = native;
 		}
 		/*
-		public bool SolveMLCP(btMatrixX<float> a, btVectorX<float> b, btVectorX<float> x,
-			btVectorX<float> lo, btVectorX<float> hi, AlignedObjectArray<int> limitDependency,
+		public bool SolveMLCP(btMatrixX<Scalar> a, btVectorX<Scalar> b, btVectorX<Scalar> x,
+			btVectorX<Scalar> lo, btVectorX<Scalar> hi, AlignedObjectArray<int> limitDependency,
 			int numIterations, bool useSparsity = true)
 		{
 			return btMLCPSolverInterface_solveMLCP(Native, a.Native, b.Native,

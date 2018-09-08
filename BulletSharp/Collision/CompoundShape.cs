@@ -3,6 +3,13 @@ using System;
 using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class CompoundShapeChild
@@ -17,7 +24,7 @@ namespace BulletSharp
 			_childShape = childShape;
 		}
 
-		public float ChildMargin
+		public Scalar ChildMargin
 		{
 			get => btCompoundShapeChild_getChildMargin(Native);
 			set => btCompoundShapeChild_setChildMargin(Native, value);
@@ -81,7 +88,7 @@ namespace BulletSharp
 			_childList.AddChildShape(ref localTransform, shape);
 		}
 
-	   public void CalculatePrincipalAxisTransform(float[] masses, ref Matrix principal,
+	   public void CalculatePrincipalAxisTransform(Scalar[] masses, ref Matrix principal,
 			out Vector3 inertia)
 		{
 			btCompoundShape_calculatePrincipalAxisTransform(Native, masses,
@@ -147,7 +154,7 @@ namespace BulletSharp
 		public CollisionShapeData CollisionShapeData;
 		public IntPtr ChildShapePtr;
 		public int NumChildShapes;
-		public float CollisionMargin;
+		public Scalar CollisionMargin;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeData), fieldName).ToInt32(); }
 	}
@@ -158,7 +165,7 @@ namespace BulletSharp
 		public TransformFloatData Transform;
 		public IntPtr ChildShape;
 		public int ChildShapeType;
-		public float ChildMargin;
+		public Scalar ChildMargin;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeChildData), fieldName).ToInt32(); }
 	}

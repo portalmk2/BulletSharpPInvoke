@@ -2,16 +2,23 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class StaticPlaneShape : ConcaveShape
 	{
-		public StaticPlaneShape(Vector3 planeNormal, float planeConstant)
+		public StaticPlaneShape(Vector3 planeNormal, Scalar planeConstant)
 			: base(btStaticPlaneShape_new(ref planeNormal, planeConstant))
 		{
 		}
 
-		public float PlaneConstant => btStaticPlaneShape_getPlaneConstant(Native);
+		public Scalar PlaneConstant => btStaticPlaneShape_getPlaneConstant(Native);
 
 		public Vector3 PlaneNormal
 		{
@@ -30,7 +37,7 @@ namespace BulletSharp
 		public CollisionShapeData CollisionShapeData;
 		public Vector3FloatData LocalScaling;
 		public Vector3FloatData PlaneNormal;
-		public float PlaneConstant;
+		public Scalar PlaneConstant;
 		public int Padding;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(StaticPlaneShapeData), fieldName).ToInt32(); }

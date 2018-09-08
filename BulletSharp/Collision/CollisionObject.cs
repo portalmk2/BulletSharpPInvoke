@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+    using Scalar = System.Double;
+#else
+    using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum ActivationState
@@ -171,7 +178,7 @@ namespace BulletSharp
 				frictionMode);
 		}
 
-		public void SetContactStiffnessAndDamping(float stiffness, float damping)
+		public void SetContactStiffnessAndDamping(Scalar stiffness, Scalar damping)
 		{
 			btCollisionObject_setContactStiffnessAndDamping(Native, stiffness, damping);
 		}
@@ -213,15 +220,15 @@ namespace BulletSharp
 			}
 		}
 
-		public float CcdMotionThreshold
+		public Scalar CcdMotionThreshold
 		{
 			get => btCollisionObject_getCcdMotionThreshold(Native);
 			set => btCollisionObject_setCcdMotionThreshold(Native, value);
 		}
 
-		public float CcdSquareMotionThreshold => btCollisionObject_getCcdSquareMotionThreshold(Native);
+		public Scalar CcdSquareMotionThreshold => btCollisionObject_getCcdSquareMotionThreshold(Native);
 
-		public float CcdSweptSphereRadius
+		public Scalar CcdSweptSphereRadius
 		{
 			get => btCollisionObject_getCcdSweptSphereRadius(Native);
 			set => btCollisionObject_setCcdSweptSphereRadius(Native, value);
@@ -249,23 +256,23 @@ namespace BulletSharp
 			set => btCollisionObject_setCompanionId(Native, value);
 		}
 
-		public float ContactDamping => btCollisionObject_getContactDamping(Native);
+		public Scalar ContactDamping => btCollisionObject_getContactDamping(Native);
 
-		public float ContactProcessingThreshold
+		public Scalar ContactProcessingThreshold
 		{
 			get => btCollisionObject_getContactProcessingThreshold(Native);
 			set => btCollisionObject_setContactProcessingThreshold(Native, value);
 		}
 
-		public float ContactStiffness => btCollisionObject_getContactStiffness(Native);
+		public Scalar ContactStiffness => btCollisionObject_getContactStiffness(Native);
 
-		public float DeactivationTime
+		public Scalar DeactivationTime
 		{
 			get => btCollisionObject_getDeactivationTime(Native);
 			set => btCollisionObject_setDeactivationTime(Native, value);
 		}
 
-		public float Friction
+		public Scalar Friction
 		{
 			get => btCollisionObject_getFriction(Native);
 			set => btCollisionObject_setFriction(Native, value);
@@ -273,7 +280,7 @@ namespace BulletSharp
 
 		public bool HasContactResponse => btCollisionObject_hasContactResponse(Native);
 
-		public float HitFraction
+		public Scalar HitFraction
 		{
 			get => btCollisionObject_getHitFraction(Native);
 			set => btCollisionObject_setHitFraction(Native, value);
@@ -328,19 +335,19 @@ namespace BulletSharp
 
 		public bool IsStaticOrKinematicObject => btCollisionObject_isStaticOrKinematicObject(Native);
 
-		public float Restitution
+		public Scalar Restitution
 		{
 			get => btCollisionObject_getRestitution(Native);
 			set => btCollisionObject_setRestitution(Native, value);
 		}
 
-		public float RollingFriction
+		public Scalar RollingFriction
 		{
 			get => btCollisionObject_getRollingFriction(Native);
 			set => btCollisionObject_setRollingFriction(Native, value);
 		}
 
-		public float SpinningFriction
+		public Scalar SpinningFriction
 		{
 			get => btCollisionObject_getSpinningFriction(Native);
 			set => btCollisionObject_setSpinningFriction(Native, value);
@@ -436,16 +443,16 @@ namespace BulletSharp
 		public Vector3FloatData InterpolationLinearVelocity;
 		public Vector3FloatData InterpolationAngularVelocity;
 		public Vector3FloatData AnisotropicFriction;
-		public float ContactProcessingThreshold;	
-		public float DeactivationTime;
-		public float Friction;
-		public float RollingFriction;
-		public float ContactDamping;
-		public float ContactStiffness;
-		public float Restitution;
-		public float HitFraction; 
-		public float CcdSweptSphereRadius;
-		public float CcdMotionThreshold;
+		public Scalar ContactProcessingThreshold;	
+		public Scalar DeactivationTime;
+		public Scalar Friction;
+		public Scalar RollingFriction;
+		public Scalar ContactDamping;
+		public Scalar ContactStiffness;
+		public Scalar Restitution;
+		public Scalar HitFraction; 
+		public Scalar CcdSweptSphereRadius;
+		public Scalar CcdMotionThreshold;
 		public int HasAnisotropicFriction;
 		public int CollisionFlags;
 		public int IslandTag1;

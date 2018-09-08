@@ -1,6 +1,13 @@
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class Hinge2Constraint : Generic6DofSpring2Constraint
@@ -14,12 +21,12 @@ namespace BulletSharp
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public void SetLowerLimit(float ang1min)
+		public void SetLowerLimit(Scalar ang1min)
 		{
 			btHinge2Constraint_setLowerLimit(Native, ang1min);
 		}
 
-		public void SetUpperLimit(float ang1max)
+		public void SetUpperLimit(Scalar ang1max)
 		{
 			btHinge2Constraint_setUpperLimit(Native, ang1max);
 		}
@@ -44,9 +51,9 @@ namespace BulletSharp
 			}
 		}
 
-		public float Angle1 => btHinge2Constraint_getAngle1(Native);
+		public Scalar Angle1 => btHinge2Constraint_getAngle1(Native);
 
-		public float Angle2 => btHinge2Constraint_getAngle2(Native);
+		public Scalar Angle2 => btHinge2Constraint_getAngle2(Native);
 
 		public Vector3 Axis1
 		{

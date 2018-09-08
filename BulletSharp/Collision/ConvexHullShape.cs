@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class ConvexHullShape : PolyhedralConvexAabbCachingShape
@@ -16,12 +23,12 @@ namespace BulletSharp
 		{
 		}
 
-		public ConvexHullShape(float[] points)
-			: this(points, points.Length / 3, 3 * sizeof(float))
+		public ConvexHullShape(Scalar[] points)
+			: this(points, points.Length / 3, 3 * sizeof(Scalar))
 		{
 		}
 
-		public ConvexHullShape(float[] points, int numPoints, int stride = 3 * sizeof(float))
+		public ConvexHullShape(Scalar[] points, int numPoints, int stride = 3 * sizeof(Scalar))
 			: base(btConvexHullShape_new4(points, numPoints, stride))
 		{
 		}

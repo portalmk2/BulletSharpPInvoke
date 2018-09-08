@@ -2,6 +2,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class Generic6DofSpringConstraint : Generic6DofConstraint
@@ -29,17 +36,17 @@ namespace BulletSharp
 			btGeneric6DofSpringConstraint_enableSpring(Native, index, onOff);
 		}
 
-		public float GetDamping(int index)
+		public Scalar GetDamping(int index)
 		{
 			return btGeneric6DofSpringConstraint_getDamping(Native, index);
 		}
 
-		public float GetEquilibriumPoint(int index)
+		public Scalar GetEquilibriumPoint(int index)
 		{
 			return btGeneric6DofSpringConstraint_getEquilibriumPoint(Native, index);
 		}
 
-		public float GetStiffness(int index)
+		public Scalar GetStiffness(int index)
 		{
 			return btGeneric6DofSpringConstraint_getStiffness(Native, index);
 		}
@@ -49,7 +56,7 @@ namespace BulletSharp
 			return btGeneric6DofSpringConstraint_isSpringEnabled(Native, index);
 		}
 
-		public void SetDamping(int index, float damping)
+		public void SetDamping(int index, Scalar damping)
 		{
 			btGeneric6DofSpringConstraint_setDamping(Native, index, damping);
 		}
@@ -64,12 +71,12 @@ namespace BulletSharp
 			btGeneric6DofSpringConstraint_setEquilibriumPoint2(Native, index);
 		}
 
-		public void SetEquilibriumPoint(int index, float val)
+		public void SetEquilibriumPoint(int index, Scalar val)
 		{
 			btGeneric6DofSpringConstraint_setEquilibriumPoint3(Native, index, val);
 		}
 
-		public void SetStiffness(int index, float stiffness)
+		public void SetStiffness(int index, Scalar stiffness)
 		{
 			btGeneric6DofSpringConstraint_setStiffness(Native, index, stiffness);
 		}
@@ -82,11 +89,11 @@ namespace BulletSharp
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
 		public int[] SpringEnabled;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-		public float[] EquilibriumPoint;
+		public Scalar[] EquilibriumPoint;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-		public float[] SpringStiffness;
+		public Scalar[] SpringStiffness;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-		public float[] SpringDamping;
+		public Scalar[] SpringDamping;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintFloatData), fieldName).ToInt32(); }
 	}

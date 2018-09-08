@@ -2,6 +2,13 @@ using System;
 using System.IO;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class DiscreteDynamicsWorld : DynamicsWorld
@@ -117,7 +124,7 @@ namespace BulletSharp
 			btDiscreteDynamicsWorld_synchronizeSingleMotionState(Native, body.Native);
 		}
 
-		public void UpdateVehicles(float timeStep)
+		public void UpdateVehicles(Scalar timeStep)
 		{
 			btDiscreteDynamicsWorld_updateVehicles(Native, timeStep);
 		}

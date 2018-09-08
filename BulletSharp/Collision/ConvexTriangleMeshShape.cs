@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class ConvexTriangleMeshShape : PolyhedralConvexAabbCachingShape
@@ -20,7 +27,7 @@ namespace BulletSharp
 		}
 
 		public void CalculatePrincipalAxisTransform(Matrix principal, out Vector3 inertia,
-			out float volume)
+			out Scalar volume)
 		{
 			btConvexTriangleMeshShape_calculatePrincipalAxisTransform(Native, ref principal,
 				out inertia, out volume);

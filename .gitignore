@@ -3,3 +3,6 @@ bin
 packages
 *.suo
 *.user
+
+/build
+/unity_test

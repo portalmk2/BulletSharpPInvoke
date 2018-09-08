@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class ConvexShape : CollisionShape
@@ -64,21 +71,21 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out Scalar minProj, out Scalar maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
 				out witnesPtMin, out witnesPtMax);
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
+		public void Project(Matrix trans, Vector3 dir, out Scalar minProj, out Scalar maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
 				out witnesPtMin, out witnesPtMax);
 		}
 
-		public float MarginNonVirtual => btConvexShape_getMarginNonVirtual(Native);
+		public Scalar MarginNonVirtual => btConvexShape_getMarginNonVirtual(Native);
 
 		public int NumPreferredPenetrationDirections => btConvexShape_getNumPreferredPenetrationDirections(Native);
 	}

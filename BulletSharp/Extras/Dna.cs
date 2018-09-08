@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     public class Dna

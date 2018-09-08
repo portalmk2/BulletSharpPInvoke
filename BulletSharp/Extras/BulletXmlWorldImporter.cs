@@ -6,9 +6,18 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using BulletSharp.Math;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
-	public class BulletXmlWorldImporter : WorldImporter
+#if !BT_USE_DOUBLE_PRECISION
+
+    public class BulletXmlWorldImporter : WorldImporter
 	{
         private int _fileVersion = -1;
         private bool _fileOK = false;
@@ -427,7 +436,7 @@ namespace BulletSharp
 
         private void SetFloatValue(BulletWriter writer, XmlNode valueNode, int offset)
         {
-            writer.Write(float.Parse(valueNode.InnerText, CultureInfo.InvariantCulture), offset);
+            writer.Write(Scalar.Parse(valueNode.InnerText, CultureInfo.InvariantCulture), offset);
         }
 
         private void SetIntValue(BulletWriter writer, XmlNode valueNode, int offset)
@@ -463,7 +472,7 @@ namespace BulletSharp
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    writer.Write(float.Parse(value, CultureInfo.InvariantCulture), offset + i * sizeof(float));
+                    writer.Write(Scalar.Parse(value, CultureInfo.InvariantCulture), offset + i * sizeof(Scalar));
                     i++;
                     if (i == 4)
                     {
@@ -473,4 +482,6 @@ namespace BulletSharp
             }
         }
 	}
+
+#endif
 }

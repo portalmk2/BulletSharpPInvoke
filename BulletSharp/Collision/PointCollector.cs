@@ -1,6 +1,13 @@
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class PointCollector : DiscreteCollisionDetectorInterface.Result
@@ -10,7 +17,7 @@ namespace BulletSharp
 		{
 		}
 
-		public float Distance
+		public Scalar Distance
 		{
 			get => btPointCollector_getDistance(Native);
 			set => btPointCollector_setDistance(Native, value);

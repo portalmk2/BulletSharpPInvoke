@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class ConvexInternalShape : ConvexShape
@@ -12,17 +19,17 @@ namespace BulletSharp
 		{
 		}
 
-		public void SetSafeMargin(float minDimension, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMargin(Scalar minDimension, Scalar defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin(Native, minDimension, defaultMarginMultiplier);
 		}
 
-		public void SetSafeMarginRef(ref Vector3 halfExtents, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMarginRef(ref Vector3 halfExtents, Scalar defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin2(Native, ref halfExtents, defaultMarginMultiplier);
 		}
 
-		public void SetSafeMargin(Vector3 halfExtents, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMargin(Vector3 halfExtents, Scalar defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin2(Native, ref halfExtents, defaultMarginMultiplier);
 		}
@@ -48,7 +55,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float MarginNV => btConvexInternalShape_getMarginNV(Native);
+		public Scalar MarginNV => btConvexInternalShape_getMarginNV(Native);
 	}
 
 	public abstract class ConvexInternalAabbCachingShape : ConvexInternalShape
@@ -70,7 +77,7 @@ namespace BulletSharp
 		public CollisionShapeData CollisionShapeData;
 		public Vector3FloatData LocalScaling;
 		public Vector3FloatData ImplicitShapeDimensions;
-		public float CollisionMargin;
+		public Scalar CollisionMargin;
 		public int Padding;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexInternalShapeData), fieldName).ToInt32(); }

@@ -4,6 +4,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum RotateOrder
@@ -37,12 +44,12 @@ namespace BulletSharp
 			_native = btRotationalLimitMotor2_new2(limitMotor._native);
 		}
 
-		public void TestLimitValue(float testValue)
+		public void TestLimitValue(Scalar testValue)
 		{
 			btRotationalLimitMotor2_testLimitValue(_native, testValue);
 		}
 
-		public float Bounce
+		public Scalar Bounce
 		{
 			get => btRotationalLimitMotor2_getBounce(_native);
 			set => btRotationalLimitMotor2_setBounce(_native, value);
@@ -54,19 +61,19 @@ namespace BulletSharp
 			set => btRotationalLimitMotor2_setCurrentLimit(_native, value);
 		}
 
-		public float CurrentLimitError
+		public Scalar CurrentLimitError
 		{
 			get => btRotationalLimitMotor2_getCurrentLimitError(_native);
 			set => btRotationalLimitMotor2_setCurrentLimitError(_native, value);
 		}
 
-		public float CurrentLimitErrorHi
+		public Scalar CurrentLimitErrorHi
 		{
 			get => btRotationalLimitMotor2_getCurrentLimitErrorHi(_native);
 			set => btRotationalLimitMotor2_setCurrentLimitErrorHi(_native, value);
 		}
 
-		public float CurrentPosition
+		public Scalar CurrentPosition
 		{
 			get => btRotationalLimitMotor2_getCurrentPosition(_native);
 			set => btRotationalLimitMotor2_setCurrentPosition(_native, value);
@@ -84,13 +91,13 @@ namespace BulletSharp
 			set => btRotationalLimitMotor2_setEnableSpring(_native, value);
 		}
 
-		public float EquilibriumPoint
+		public Scalar EquilibriumPoint
 		{
 			get => btRotationalLimitMotor2_getEquilibriumPoint(_native);
 			set => btRotationalLimitMotor2_setEquilibriumPoint(_native, value);
 		}
 
-		public float HiLimit
+		public Scalar HiLimit
 		{
 			get => btRotationalLimitMotor2_getHiLimit(_native);
 			set => btRotationalLimitMotor2_setHiLimit(_native, value);
@@ -98,25 +105,25 @@ namespace BulletSharp
 
 		public bool IsLimited => btRotationalLimitMotor2_isLimited(_native);
 
-		public float LoLimit
+		public Scalar LoLimit
 		{
 			get => btRotationalLimitMotor2_getLoLimit(_native);
 			set => btRotationalLimitMotor2_setLoLimit(_native, value);
 		}
 
-		public float MaxMotorForce
+		public Scalar MaxMotorForce
 		{
 			get => btRotationalLimitMotor2_getMaxMotorForce(_native);
 			set => btRotationalLimitMotor2_setMaxMotorForce(_native, value);
 		}
 
-		public float MotorCfm
+		public Scalar MotorCfm
 		{
 			get => btRotationalLimitMotor2_getMotorCFM(_native);
 			set => btRotationalLimitMotor2_setMotorCFM(_native, value);
 		}
 
-		public float MotorErp
+		public Scalar MotorErp
 		{
 			get => btRotationalLimitMotor2_getMotorERP(_native);
 			set => btRotationalLimitMotor2_setMotorERP(_native, value);
@@ -128,13 +135,13 @@ namespace BulletSharp
 			set => btRotationalLimitMotor2_setServoMotor(_native, value);
 		}
 
-		public float ServoTarget
+		public Scalar ServoTarget
 		{
 			get => btRotationalLimitMotor2_getServoTarget(_native);
 			set => btRotationalLimitMotor2_setServoTarget(_native, value);
 		}
 
-		public float SpringDamping
+		public Scalar SpringDamping
 		{
 			get => btRotationalLimitMotor2_getSpringDamping(_native);
 			set => btRotationalLimitMotor2_setSpringDamping(_native, value);
@@ -146,7 +153,7 @@ namespace BulletSharp
 			set => btRotationalLimitMotor2_setSpringDampingLimited(_native, value);
 		}
 
-		public float SpringStiffness
+		public Scalar SpringStiffness
 		{
 			get => btRotationalLimitMotor2_getSpringStiffness(_native);
 			set => btRotationalLimitMotor2_setSpringStiffness(_native, value);
@@ -158,19 +165,19 @@ namespace BulletSharp
 			set => btRotationalLimitMotor2_setSpringStiffnessLimited(_native, value);
 		}
 
-		public float StopCfm
+		public Scalar StopCfm
 		{
 			get => btRotationalLimitMotor2_getStopCFM(_native);
 			set => btRotationalLimitMotor2_setStopCFM(_native, value);
 		}
 
-		public float StopErp
+		public Scalar StopErp
 		{
 			get => btRotationalLimitMotor2_getStopERP(_native);
 			set => btRotationalLimitMotor2_setStopERP(_native, value);
 		}
 
-		public float TargetVelocity
+		public Scalar TargetVelocity
 		{
 			get => btRotationalLimitMotor2_getTargetVelocity(_native);
 			set => btRotationalLimitMotor2_setTargetVelocity(_native, value);
@@ -226,7 +233,7 @@ namespace BulletSharp
 			return btTranslationalLimitMotor2_isLimited(_native, limitIndex);
 		}
 
-		public void TestLimitValue(int limitIndex, float testValue)
+		public void TestLimitValue(int limitIndex, Scalar testValue)
 		{
 			btTranslationalLimitMotor2_testLimitValue(_native, limitIndex, testValue);
 		}
@@ -489,7 +496,7 @@ namespace BulletSharp
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public static float BtGetMatrixElem(Matrix mat, int index)
+		public static Scalar BtGetMatrixElem(Matrix mat, int index)
 		{
 			return btGeneric6DofSpring2Constraint_btGetMatrixElem(ref mat, index);
 		}
@@ -515,7 +522,7 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_enableSpring(Native, index, onOff);
 		}
 
-		public float GetAngle(int axisIndex)
+		public Scalar GetAngle(int axisIndex)
 		{
 			return btGeneric6DofSpring2Constraint_getAngle(Native, axisIndex);
 		}
@@ -527,7 +534,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public float GetRelativePivotPosition(int axisIndex)
+		public Scalar GetRelativePivotPosition(int axisIndex)
 		{
 			return btGeneric6DofSpring2Constraint_getRelativePivotPosition(Native,
 				axisIndex);
@@ -582,12 +589,12 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setAxis(Native, ref axis1, ref axis2);
 		}
 
-		public void SetBounce(int index, float bounce)
+		public void SetBounce(int index, Scalar bounce)
 		{
 			btGeneric6DofSpring2Constraint_setBounce(Native, index, bounce);
 		}
 
-		public void SetDamping(int index, float damping, bool limitIfNeeded = true)
+		public void SetDamping(int index, Scalar damping, bool limitIfNeeded = true)
 		{
 			btGeneric6DofSpring2Constraint_setDamping(Native, index, damping, limitIfNeeded);
 		}
@@ -597,7 +604,7 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setEquilibriumPoint(Native);
 		}
 
-		public void SetEquilibriumPoint(int index, float val)
+		public void SetEquilibriumPoint(int index, Scalar val)
 		{
 			btGeneric6DofSpring2Constraint_setEquilibriumPoint2(Native, index, val);
 		}
@@ -612,17 +619,17 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(int axis, float lo, float hi)
+		public void SetLimit(int axis, Scalar lo, Scalar hi)
 		{
 			btGeneric6DofSpring2Constraint_setLimit(Native, axis, lo, hi);
 		}
 
-		public void SetLimitReversed(int axis, float lo, float hi)
+		public void SetLimitReversed(int axis, Scalar lo, Scalar hi)
 		{
 			btGeneric6DofSpring2Constraint_setLimitReversed(Native, axis, lo, hi);
 		}
 
-		public void SetMaxMotorForce(int index, float force)
+		public void SetMaxMotorForce(int index, Scalar force)
 		{
 			btGeneric6DofSpring2Constraint_setMaxMotorForce(Native, index, force);
 		}
@@ -632,18 +639,18 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setServo(Native, index, onOff);
 		}
 
-		public void SetServoTarget(int index, float target)
+		public void SetServoTarget(int index, Scalar target)
 		{
 			btGeneric6DofSpring2Constraint_setServoTarget(Native, index, target);
 		}
 
-		public void SetStiffness(int index, float stiffness, bool limitIfNeeded = true)
+		public void SetStiffness(int index, Scalar stiffness, bool limitIfNeeded = true)
 		{
 			btGeneric6DofSpring2Constraint_setStiffness(Native, index, stiffness,
 				limitIfNeeded);
 		}
 
-		public void SetTargetVelocity(int index, float velocity)
+		public void SetTargetVelocity(int index, Scalar velocity)
 		{
 			btGeneric6DofSpring2Constraint_setTargetVelocity(Native, index, velocity);
 		}

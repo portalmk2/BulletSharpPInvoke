@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class BoxBoxTransformCache : IDisposable
@@ -125,7 +132,7 @@ namespace BulletSharp
 			Native = btAABB_new2(ref v1, ref v2, ref v3);
 		}
 
-		public Aabb(Vector3 v1, Vector3 v2, Vector3 v3, float margin)
+		public Aabb(Vector3 v1, Vector3 v2, Vector3 v3, Scalar margin)
 		{
 			Native = btAABB_new3(ref v1, ref v2, ref v3, margin);
 		}
@@ -135,7 +142,7 @@ namespace BulletSharp
 			Native = btAABB_new4(other.Native);
 		}
 
-		public Aabb(Aabb other, float margin)
+		public Aabb(Aabb other, Scalar margin)
 		{
 			Native = btAABB_new5(other.Native, margin);
 		}
@@ -187,7 +194,7 @@ namespace BulletSharp
 				ref trianglePlane);
 		}
 
-		public void CopyWithMargin(Aabb other, float margin)
+		public void CopyWithMargin(Aabb other, Scalar margin)
 		{
 			btAABB_copy_with_margin(Native, other.Native, margin);
 		}
@@ -207,7 +214,7 @@ namespace BulletSharp
 			return btAABB_has_collision(Native, other.Native);
 		}
 
-		public void IncrementMargin(float margin)
+		public void IncrementMargin(Scalar margin)
 		{
 			btAABB_increment_margin(Native, margin);
 		}
@@ -249,12 +256,12 @@ namespace BulletSharp
 			return btAABB_plane_classify(Native, ref plane);
 		}
 
-		public void ProjectionIntervalRef(ref Vector3 direction, out float vmin, out float vmax)
+		public void ProjectionIntervalRef(ref Vector3 direction, out Scalar vmin, out Scalar vmax)
 		{
 			btAABB_projection_interval(Native, ref direction, out vmin, out vmax);
 		}
 
-		public void ProjectionInterval(Vector3 direction, out float vmin, out float vmax)
+		public void ProjectionInterval(Vector3 direction, out Scalar vmin, out Scalar vmax)
 		{
 			btAABB_projection_interval(Native, ref direction, out vmin, out vmax);
 		}

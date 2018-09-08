@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class RigidBodyConstructionInfo : IDisposable
@@ -11,7 +18,7 @@ namespace BulletSharp
 		private CollisionShape _collisionShape;
 		private MotionState _motionState;
 
-		public RigidBodyConstructionInfo(float mass, MotionState motionState,
+		public RigidBodyConstructionInfo(Scalar mass, MotionState motionState,
 			CollisionShape collisionShape)
 		{
 			Native = btRigidBody_btRigidBodyConstructionInfo_new(mass, motionState != null ? motionState._native : IntPtr.Zero,
@@ -20,7 +27,7 @@ namespace BulletSharp
 			_motionState = motionState;
 		}
 
-		public RigidBodyConstructionInfo(float mass, MotionState motionState,
+		public RigidBodyConstructionInfo(Scalar mass, MotionState motionState,
 			CollisionShape collisionShape, Vector3 localInertia)
 		{
 			Native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, motionState != null ? motionState._native : IntPtr.Zero,
@@ -29,13 +36,13 @@ namespace BulletSharp
 			_motionState = motionState;
 		}
 
-		public float AdditionalAngularDampingFactor
+		public Scalar AdditionalAngularDampingFactor
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingFactor(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAdditionalAngularDampingFactor(Native, value);
 		}
 
-		public float AdditionalAngularDampingThresholdSqr
+		public Scalar AdditionalAngularDampingThresholdSqr
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingThresholdSqr(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAdditionalAngularDampingThresholdSqr(Native, value);
@@ -47,25 +54,25 @@ namespace BulletSharp
 			set => btRigidBody_btRigidBodyConstructionInfo_setAdditionalDamping(Native, value);
 		}
 
-		public float AdditionalDampingFactor
+		public Scalar AdditionalDampingFactor
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAdditionalDampingFactor(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAdditionalDampingFactor(Native, value);
 		}
 
-		public float AdditionalLinearDampingThresholdSqr
+		public Scalar AdditionalLinearDampingThresholdSqr
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAdditionalLinearDampingThresholdSqr(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAdditionalLinearDampingThresholdSqr(Native, value);
 		}
 
-		public float AngularDamping
+		public Scalar AngularDamping
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAngularDamping(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAngularDamping(Native, value);
 		}
 
-		public float AngularSleepingThreshold
+		public Scalar AngularSleepingThreshold
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getAngularSleepingThreshold(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setAngularSleepingThreshold(Native, value);
@@ -81,19 +88,19 @@ namespace BulletSharp
 			}
 		}
 
-		public float Friction
+		public Scalar Friction
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getFriction(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setFriction(Native, value);
 		}
 
-		public float LinearDamping
+		public Scalar LinearDamping
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getLinearDamping(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setLinearDamping(Native, value);
 		}
 
-		public float LinearSleepingThreshold
+		public Scalar LinearSleepingThreshold
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getLinearSleepingThreshold(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setLinearSleepingThreshold(Native, value);
@@ -110,7 +117,7 @@ namespace BulletSharp
 			set => btRigidBody_btRigidBodyConstructionInfo_setLocalInertia(Native, ref value);
 		}
 
-		public float Mass
+		public Scalar Mass
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getMass(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setMass(Native, value);
@@ -126,13 +133,13 @@ namespace BulletSharp
 			}
 		}
 
-		public float Restitution
+		public Scalar Restitution
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getRestitution(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setRestitution(Native, value);
 		}
 
-		public float RollingFriction
+		public Scalar RollingFriction
 		{
 			get => btRigidBody_btRigidBodyConstructionInfo_getRollingFriction(Native);
 			set => btRigidBody_btRigidBodyConstructionInfo_setRollingFriction(Native, value);

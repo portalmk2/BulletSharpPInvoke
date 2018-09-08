@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class CollisionAlgorithmConstructionInfo : IDisposable
@@ -74,7 +81,7 @@ namespace BulletSharp
 			_preventDelete = preventDelete;
 		}
 
-		public float CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
+		public Scalar CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
 			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
 			return btCollisionAlgorithm_calculateTimeOfImpact(Native, body0.Native,

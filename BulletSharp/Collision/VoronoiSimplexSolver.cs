@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class UsageBitfield
@@ -91,22 +98,22 @@ namespace BulletSharp
 			btSubSimplexClosestResult_setBarycentricCoordinates(Native);
 		}
 
-		public void SetBarycentricCoordinates(float a)
+		public void SetBarycentricCoordinates(Scalar a)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates2(Native, a);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b)
+		public void SetBarycentricCoordinates(Scalar a, Scalar b)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates3(Native, a, b);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b, float c)
+		public void SetBarycentricCoordinates(Scalar a, Scalar b, Scalar c)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates4(Native, a, b, c);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b, float c, float d)
+		public void SetBarycentricCoordinates(Scalar a, Scalar b, Scalar c, Scalar d)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates5(Native, a, b, c,
 				d);
@@ -253,7 +260,7 @@ namespace BulletSharp
 			return btVoronoiSimplexSolver_inSimplex(Native, ref w);
 		}
 
-		public float MaxVertex()
+		public Scalar MaxVertex()
 		{
 			return btVoronoiSimplexSolver_maxVertex(Native);
 		}
@@ -330,7 +337,7 @@ namespace BulletSharp
 			set => btVoronoiSimplexSolver_setCachedValidClosest(Native, value);
 		}
 
-		public float EqualVertexThreshold
+		public Scalar EqualVertexThreshold
 		{
 			get => btVoronoiSimplexSolver_getEqualVertexThreshold(Native);
 			set => btVoronoiSimplexSolver_setEqualVertexThreshold(Native, value);

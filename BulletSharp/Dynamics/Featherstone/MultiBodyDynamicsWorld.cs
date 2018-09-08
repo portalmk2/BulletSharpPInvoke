@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class MultiBodyDynamicsWorld : DiscreteDynamicsWorld
@@ -63,7 +70,7 @@ namespace BulletSharp
 			return _constraints[constraintIndex];
 		}
 
-		public void IntegrateTransforms(float timeStep)
+		public void IntegrateTransforms(Scalar timeStep)
 		{
 			btMultiBodyDynamicsWorld_integrateTransforms(Native, timeStep);
 		}

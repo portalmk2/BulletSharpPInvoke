@@ -4,6 +4,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	[Flags]
@@ -41,32 +48,32 @@ namespace BulletSharp
 			return btRotationalLimitMotor_needApplyTorques(Native);
 		}
 
-		public float SolveAngularLimitsRef(float timeStep, ref Vector3 axis, float jacDiagABInv,
+		public Scalar SolveAngularLimitsRef(Scalar timeStep, ref Vector3 axis, Scalar jacDiagABInv,
 			RigidBody body0, RigidBody body1)
 		{
 			return btRotationalLimitMotor_solveAngularLimits(Native, timeStep, ref axis,
 				jacDiagABInv, body0.Native, body1.Native);
 		}
 
-		public float SolveAngularLimits(float timeStep, Vector3 axis, float jacDiagABInv,
+		public Scalar SolveAngularLimits(Scalar timeStep, Vector3 axis, Scalar jacDiagABInv,
 			RigidBody body0, RigidBody body1)
 		{
 			return btRotationalLimitMotor_solveAngularLimits(Native, timeStep, ref axis,
 				jacDiagABInv, body0.Native, body1.Native);
 		}
 
-		public int TestLimitValue(float testValue)
+		public int TestLimitValue(Scalar testValue)
 		{
 			return btRotationalLimitMotor_testLimitValue(Native, testValue);
 		}
 
-		public float AccumulatedImpulse
+		public Scalar AccumulatedImpulse
 		{
 			get => btRotationalLimitMotor_getAccumulatedImpulse(Native);
 			set => btRotationalLimitMotor_setAccumulatedImpulse(Native, value);
 		}
 
-		public float Bounce
+		public Scalar Bounce
 		{
 			get => btRotationalLimitMotor_getBounce(Native);
 			set => btRotationalLimitMotor_setBounce(Native, value);
@@ -78,19 +85,19 @@ namespace BulletSharp
 			set => btRotationalLimitMotor_setCurrentLimit(Native, value);
 		}
 
-		public float CurrentLimitError
+		public Scalar CurrentLimitError
 		{
 			get => btRotationalLimitMotor_getCurrentLimitError(Native);
 			set => btRotationalLimitMotor_setCurrentLimitError(Native, value);
 		}
 
-		public float CurrentPosition
+		public Scalar CurrentPosition
 		{
 			get => btRotationalLimitMotor_getCurrentPosition(Native);
 			set => btRotationalLimitMotor_setCurrentPosition(Native, value);
 		}
 
-		public float Damping
+		public Scalar Damping
 		{
 			get => btRotationalLimitMotor_getDamping(Native);
 			set => btRotationalLimitMotor_setDamping(Native, value);
@@ -102,56 +109,56 @@ namespace BulletSharp
 			set => btRotationalLimitMotor_setEnableMotor(Native, value);
 		}
 
-		public float HiLimit
+		public Scalar HiLimit
 		{
 			get => btRotationalLimitMotor_getHiLimit(Native);
 			set => btRotationalLimitMotor_setHiLimit(Native, value);
 		}
 
 		public bool IsLimited => btRotationalLimitMotor_isLimited(Native);
-		public float LimitSoftness
+		public Scalar LimitSoftness
 		{
 			get => btRotationalLimitMotor_getLimitSoftness(Native);
 			set => btRotationalLimitMotor_setLimitSoftness(Native, value);
 		}
 
-		public float LoLimit
+		public Scalar LoLimit
 		{
 			get => btRotationalLimitMotor_getLoLimit(Native);
 			set => btRotationalLimitMotor_setLoLimit(Native, value);
 		}
 
-		public float MaxLimitForce
+		public Scalar MaxLimitForce
 		{
 			get => btRotationalLimitMotor_getMaxLimitForce(Native);
 			set => btRotationalLimitMotor_setMaxLimitForce(Native, value);
 		}
 
-		public float MaxMotorForce
+		public Scalar MaxMotorForce
 		{
 			get => btRotationalLimitMotor_getMaxMotorForce(Native);
 			set => btRotationalLimitMotor_setMaxMotorForce(Native, value);
 		}
 
-		public float NormalCfm
+		public Scalar NormalCfm
 		{
 			get => btRotationalLimitMotor_getNormalCFM(Native);
 			set => btRotationalLimitMotor_setNormalCFM(Native, value);
 		}
 
-		public float StopCfm
+		public Scalar StopCfm
 		{
 			get => btRotationalLimitMotor_getStopCFM(Native);
 			set => btRotationalLimitMotor_setStopCFM(Native, value);
 		}
 
-		public float StopErp
+		public Scalar StopErp
 		{
 			get => btRotationalLimitMotor_getStopERP(Native);
 			set => btRotationalLimitMotor_setStopERP(Native, value);
 		}
 
-		public float TargetVelocity
+		public Scalar TargetVelocity
 		{
 			get => btRotationalLimitMotor_getTargetVelocity(Native);
 			set => btRotationalLimitMotor_setTargetVelocity(Native, value);
@@ -212,7 +219,7 @@ namespace BulletSharp
 			return btTranslationalLimitMotor_needApplyForce(Native, limitIndex);
 		}
 
-		public float SolveLinearAxisRef(float timeStep, float jacDiagABInv, RigidBody body1,
+		public Scalar SolveLinearAxisRef(Scalar timeStep, Scalar jacDiagABInv, RigidBody body1,
 			ref Vector3 pointInA, RigidBody body2, ref Vector3 pointInB, int limitIndex, ref Vector3 axisNormalOnA,
 			ref Vector3 anchorPos)
 		{
@@ -221,7 +228,7 @@ namespace BulletSharp
 				ref axisNormalOnA, ref anchorPos);
 		}
 
-		public float SolveLinearAxis(float timeStep, float jacDiagABInv, RigidBody body1,
+		public Scalar SolveLinearAxis(Scalar timeStep, Scalar jacDiagABInv, RigidBody body1,
 			Vector3 pointInA, RigidBody body2, Vector3 pointInB, int limitIndex, Vector3 axisNormalOnA,
 			Vector3 anchorPos)
 		{
@@ -230,7 +237,7 @@ namespace BulletSharp
 				ref axisNormalOnA, ref anchorPos);
 		}
 
-		public int TestLimitValue(int limitIndex, float testValue)
+		public int TestLimitValue(int limitIndex, Scalar testValue)
 		{
 			return btTranslationalLimitMotor_testLimitValue(Native, limitIndex,
 				testValue);
@@ -274,7 +281,7 @@ namespace BulletSharp
 			set => btTranslationalLimitMotor_setCurrentLinearDiff(Native, ref value);
 		}
 
-		public float Damping
+		public Scalar Damping
 		{
 			get => btTranslationalLimitMotor_getDamping(Native);
 			set => btTranslationalLimitMotor_setDamping(Native, value);
@@ -285,7 +292,7 @@ namespace BulletSharp
 			get { return btTranslationalLimitMotor_getEnableMotor(_native); }
 		}
 		*/
-		public float LimitSoftness
+		public Scalar LimitSoftness
 		{
 			get => btTranslationalLimitMotor_getLimitSoftness(Native);
 			set => btTranslationalLimitMotor_setLimitSoftness(Native, value);
@@ -324,7 +331,7 @@ namespace BulletSharp
 			set => btTranslationalLimitMotor_setNormalCFM(Native, ref value);
 		}
 
-		public float Restitution
+		public Scalar Restitution
 		{
 			get => btTranslationalLimitMotor_getRestitution(Native);
 			set => btTranslationalLimitMotor_setRestitution(Native, value);
@@ -454,7 +461,7 @@ namespace BulletSharp
 				info._native, row, ref ax1, rotational, rotAllowed);
 		}
 
-		public float GetAngle(int axisIndex)
+		public Scalar GetAngle(int axisIndex)
 		{
 			return btGeneric6DofConstraint_getAngle(Native, axisIndex);
 		}
@@ -478,7 +485,7 @@ namespace BulletSharp
 				ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB);
 		}
 
-		public float GetRelativePivotPosition(int axisIndex)
+		public Scalar GetRelativePivotPosition(int axisIndex)
 		{
 			return btGeneric6DofConstraint_getRelativePivotPosition(Native, axisIndex);
 		}
@@ -517,7 +524,7 @@ namespace BulletSharp
 			btGeneric6DofConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(int axis, float lo, float hi)
+		public void SetLimit(int axis, Scalar lo, Scalar hi)
 		{
 			btGeneric6DofConstraint_setLimit(Native, axis, lo, hi);
 		}
@@ -527,7 +534,7 @@ namespace BulletSharp
 			return btGeneric6DofConstraint_testAngularLimitMotor(Native, axisIndex);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(Scalar timeStep)
 		{
 			btGeneric6DofConstraint_updateRHS(Native, timeStep);
 		}

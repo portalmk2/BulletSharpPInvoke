@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {/*
 	public class ConvexTriangleCallback : TriangleCallback
@@ -27,7 +34,7 @@ namespace BulletSharp
 			btConvexTriangleCallback_clearWrapperData(_native);
 		}
 
-		public void SetTimeStepAndCounters(float collisionMarginTriangle, DispatcherInfo dispatchInfo,
+		public void SetTimeStepAndCounters(Scalar collisionMarginTriangle, DispatcherInfo dispatchInfo,
 			CollisionObjectWrapper convexBodyWrap, CollisionObjectWrapper triBodyWrap,
 			ManifoldResult resultOut)
 		{
@@ -85,7 +92,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexTriangleCallback_setManifoldPtr(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexTriangleCallback_setTimeStepAndCounters(IntPtr obj, float collisionMarginTriangle, IntPtr dispatchInfo, IntPtr convexBodyWrap, IntPtr triBodyWrap, IntPtr resultOut);
+		static extern void btConvexTriangleCallback_setTimeStepAndCounters(IntPtr obj, Scalar collisionMarginTriangle, IntPtr dispatchInfo, IntPtr convexBodyWrap, IntPtr triBodyWrap, IntPtr resultOut);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexTriangleCallback_setTriangleCount(IntPtr obj, int value);
 	}

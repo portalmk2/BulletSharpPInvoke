@@ -4,6 +4,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	[Flags]
@@ -59,7 +66,7 @@ namespace BulletSharp
 			btRigidBody_applyCentralImpulse(Native, ref impulse);
 		}
 
-		public void ApplyDamping(float timeStep)
+		public void ApplyDamping(Scalar timeStep)
 		{
 			btRigidBody_applyDamping(Native, timeStep);
 		}
@@ -114,17 +121,17 @@ namespace BulletSharp
 			btRigidBody_clearForces(Native);
 		}
 
-		public void ComputeAngularImpulseDenominator(ref Vector3 axis, out float result)
+		public void ComputeAngularImpulseDenominator(ref Vector3 axis, out Scalar result)
 		{
 			result = btRigidBody_computeAngularImpulseDenominator(Native, ref axis);
 		}
 
-		public float ComputeAngularImpulseDenominator(Vector3 axis)
+		public Scalar ComputeAngularImpulseDenominator(Vector3 axis)
 		{
 			return btRigidBody_computeAngularImpulseDenominator(Native, ref axis);
 		}
 
-		public Vector3 ComputeGyroscopicForceExplicit(float maxGyroscopicForce)
+		public Vector3 ComputeGyroscopicForceExplicit(Scalar maxGyroscopicForce)
 		{
 			Vector3 value;
 			btRigidBody_computeGyroscopicForceExplicit(Native, maxGyroscopicForce,
@@ -132,14 +139,14 @@ namespace BulletSharp
 			return value;
 		}
 
-		public Vector3 ComputeGyroscopicImpulseImplicitBody(float step)
+		public Vector3 ComputeGyroscopicImpulseImplicitBody(Scalar step)
 		{
 			Vector3 value;
 			btRigidBody_computeGyroscopicImpulseImplicit_Body(Native, step, out value);
 			return value;
 		}
 
-		public Vector3 ComputeGyroscopicImpulseImplicitWorld(float deltaTime)
+		public Vector3 ComputeGyroscopicImpulseImplicitWorld(Scalar deltaTime)
 		{
 			Vector3 value;
 			btRigidBody_computeGyroscopicImpulseImplicit_World(Native, deltaTime,
@@ -147,7 +154,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public float ComputeImpulseDenominator(Vector3 pos, Vector3 normal)
+		public Scalar ComputeImpulseDenominator(Vector3 pos, Vector3 normal)
 		{
 			return btRigidBody_computeImpulseDenominator(Native, ref pos, ref normal);
 		}
@@ -175,12 +182,12 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void IntegrateVelocities(float step)
+		public void IntegrateVelocities(Scalar step)
 		{
 			btRigidBody_integrateVelocities(Native, step);
 		}
 
-		public void PredictIntegratedTransform(float step, out Matrix predictedTransform)
+		public void PredictIntegratedTransform(Scalar step, out Matrix predictedTransform)
 		{
 			btRigidBody_predictIntegratedTransform(Native, step, out predictedTransform);
 		}
@@ -204,22 +211,22 @@ namespace BulletSharp
 			}
 		}
 
-		public void SaveKinematicState(float step)
+		public void SaveKinematicState(Scalar step)
 		{
 			btRigidBody_saveKinematicState(Native, step);
 		}
 
-		public void SetDamping(float linDamping, float angDamping)
+		public void SetDamping(Scalar linDamping, Scalar angDamping)
 		{
 			btRigidBody_setDamping(Native, linDamping, angDamping);
 		}
 
-		public void SetMassPropsRef(float mass, ref Vector3 inertia)
+		public void SetMassPropsRef(Scalar mass, ref Vector3 inertia)
 		{
 			btRigidBody_setMassProps(Native, mass, ref inertia);
 		}
 
-		public void SetMassProps(float mass, Vector3 inertia)
+		public void SetMassProps(Scalar mass, Vector3 inertia)
 		{
 			btRigidBody_setMassProps(Native, mass, ref inertia);
 		}
@@ -229,7 +236,7 @@ namespace BulletSharp
 			btRigidBody_setNewBroadphaseProxy(Native, broadphaseProxy.Native);
 		}
 
-		public void SetSleepingThresholds(float linear, float angular)
+		public void SetSleepingThresholds(Scalar linear, Scalar angular)
 		{
 			btRigidBody_setSleepingThresholds(Native, linear, angular);
 		}
@@ -249,7 +256,7 @@ namespace BulletSharp
 			return GetManaged(btRigidBody_upcast(colObj.Native)) as RigidBody;
 		}
 
-		public void UpdateDeactivation(float timeStep)
+		public void UpdateDeactivation(Scalar timeStep)
 		{
 			btRigidBody_updateDeactivation(Native, timeStep);
 		}
@@ -264,7 +271,7 @@ namespace BulletSharp
 			return btRigidBody_wantsSleeping(Native);
 		}
 
-		public float AngularDamping => btRigidBody_getAngularDamping(Native);
+		public Scalar AngularDamping => btRigidBody_getAngularDamping(Native);
 
 		public Vector3 AngularFactor
 		{
@@ -277,7 +284,7 @@ namespace BulletSharp
 			set => btRigidBody_setAngularFactor(Native, ref value);
 		}
 
-		public float AngularSleepingThreshold => btRigidBody_getAngularSleepingThreshold(Native);
+		public Scalar AngularSleepingThreshold => btRigidBody_getAngularSleepingThreshold(Native);
 
 		public Vector3 AngularVelocity
 		{
@@ -363,11 +370,11 @@ namespace BulletSharp
 			}
 		}
 
-		public float InvMass => btRigidBody_getInvMass(Native);
+		public Scalar InvMass => btRigidBody_getInvMass(Native);
 
 		public bool IsInWorld => btRigidBody_isInWorld(Native);
 
-		public float LinearDamping => btRigidBody_getLinearDamping(Native);
+		public Scalar LinearDamping => btRigidBody_getLinearDamping(Native);
 
 		public Vector3 LinearFactor
 		{
@@ -380,7 +387,7 @@ namespace BulletSharp
 			set => btRigidBody_setLinearFactor(Native, ref value);
 		}
 
-		public float LinearSleepingThreshold => btRigidBody_getLinearSleepingThreshold(Native);
+		public Scalar LinearSleepingThreshold => btRigidBody_getLinearSleepingThreshold(Native);
 
 		public Vector3 LinearVelocity
 		{
@@ -460,15 +467,15 @@ namespace BulletSharp
 		public Vector3FloatData InvInertiaLocal;
 		public Vector3FloatData TotalForce;
 		public Vector3FloatData TotalTorque;
-		public float InverseMass;
-		public float LinearDamping;
-		public float AngularDamping;
-		public float AdditionalDampingFactor;
-		public float AdditionalLinearDampingThresholdSqr;
-		public float AdditionalAngularDampingThresholdSqr;
-		public float AdditionalAngularDampingFactor;
-		public float LinearSleepingThreshold;
-		public float AngularSleepingThreshold;
+		public Scalar InverseMass;
+		public Scalar LinearDamping;
+		public Scalar AngularDamping;
+		public Scalar AdditionalDampingFactor;
+		public Scalar AdditionalLinearDampingThresholdSqr;
+		public Scalar AdditionalAngularDampingThresholdSqr;
+		public Scalar AdditionalAngularDampingFactor;
+		public Scalar LinearSleepingThreshold;
+		public Scalar AngularSleepingThreshold;
 		public int AdditionalDamping;
 		//public int Padding;
 

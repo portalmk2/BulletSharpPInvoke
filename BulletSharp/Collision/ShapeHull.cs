@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     public class ShapeHull : IDisposable
@@ -18,7 +25,7 @@ namespace BulletSharp
 			_shape = shape;
 		}
 
-		public bool BuildHull(float margin)
+		public bool BuildHull(Scalar margin)
 		{
 			return btShapeHull_buildHull(Native, margin);
 		}

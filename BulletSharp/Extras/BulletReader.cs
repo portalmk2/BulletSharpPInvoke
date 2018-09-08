@@ -4,6 +4,13 @@ using BulletSharp.Math;
 using System.Collections.Generic;
 using System.Text;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     public class BulletReader : BinaryReader
@@ -25,7 +32,7 @@ namespace BulletSharp
             return ReadDouble();
         }
 
-        public float ReadSingle(int position)
+        public Scalar ReadSingle(int position)
         {
             BaseStream.Position = position;
             return ReadSingle();
@@ -45,7 +52,7 @@ namespace BulletSharp
 
         public Matrix ReadMatrix()
         {
-            float[] m = new float[16];
+            Scalar[] m = new Scalar[16];
             m[0] = ReadSingle();
             m[4] = ReadSingle();
             m[8] = ReadSingle();
@@ -68,22 +75,22 @@ namespace BulletSharp
 
         public Matrix ReadMatrixDouble()
         {
-            float[] m = new float[16];
-            m[0] = (float)ReadDouble();
-            m[4] = (float)ReadDouble();
-            m[8] = (float)ReadDouble();
+            Scalar[] m = new Scalar[16];
+            m[0] = (Scalar)ReadDouble();
+            m[4] = (Scalar)ReadDouble();
+            m[8] = (Scalar)ReadDouble();
             ReadDouble();
-            m[1] = (float)ReadDouble();
-            m[5] = (float)ReadDouble();
-            m[9] = (float)ReadDouble();
+            m[1] = (Scalar)ReadDouble();
+            m[5] = (Scalar)ReadDouble();
+            m[9] = (Scalar)ReadDouble();
             ReadDouble();
-            m[2] = (float)ReadDouble();
-            m[6] = (float)ReadDouble();
-            m[10] = (float)ReadDouble();
+            m[2] = (Scalar)ReadDouble();
+            m[6] = (Scalar)ReadDouble();
+            m[10] = (Scalar)ReadDouble();
             ReadDouble();
-            m[12] = (float)ReadDouble();
-            m[13] = (float)ReadDouble();
-            m[14] = (float)ReadDouble();
+            m[12] = (Scalar)ReadDouble();
+            m[13] = (Scalar)ReadDouble();
+            m[14] = (Scalar)ReadDouble();
             ReadDouble();
             m[15] = 1;
             return new Matrix(m);
@@ -149,10 +156,10 @@ namespace BulletSharp
 
         public Vector3 ReadVector3()
         {
-            float x = ReadSingle();
-            float y = ReadSingle();
-            float z = ReadSingle();
-            BaseStream.Position += sizeof(float); // float w = ReadSingle();
+            Scalar x = ReadSingle();
+            Scalar y = ReadSingle();
+            Scalar z = ReadSingle();
+            BaseStream.Position += sizeof(Scalar); // Scalar w = ReadSingle();
             return new Vector3(x, y, z);
         }
 
@@ -162,7 +169,7 @@ namespace BulletSharp
             double y = ReadDouble();
             double z = ReadDouble();
             BaseStream.Position += sizeof(double); // double w = ReadDouble();
-            return new Vector3((float)x, (float)y, (float)z);
+            return new Vector3((Scalar)x, (Scalar)y, (Scalar)z);
         }
 
         public Vector3 ReadVector3(int position)
@@ -201,21 +208,21 @@ namespace BulletSharp
         public static Matrix ToMatrixDouble(byte[] value, int startIndex)
         {
             return new Matrix(
-                (float)BitConverter.ToDouble(value, startIndex),
-                (float)BitConverter.ToDouble(value, startIndex + 32),
-                (float)BitConverter.ToDouble(value, startIndex + 64),
+                (Scalar)BitConverter.ToDouble(value, startIndex),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 32),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 64),
                 0,
-                (float)BitConverter.ToDouble(value, startIndex + 8),
-                (float)BitConverter.ToDouble(value, startIndex + 40),
-                (float)BitConverter.ToDouble(value, startIndex + 72),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 8),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 40),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 72),
                 0,
-                (float)BitConverter.ToDouble(value, startIndex + 16),
-                (float)BitConverter.ToDouble(value, startIndex + 48),
-                (float)BitConverter.ToDouble(value, startIndex + 80),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 16),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 48),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 80),
                 0,
-                (float)BitConverter.ToDouble(value, startIndex + 96),
-                (float)BitConverter.ToDouble(value, startIndex + 104),
-                (float)BitConverter.ToDouble(value, startIndex + 112),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 96),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 104),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 112),
                 1);
         }
 
@@ -237,9 +244,9 @@ namespace BulletSharp
         public static Vector3 ToVector3Double(byte[] value, int startIndex)
         {
             return new Vector3(
-                (float)BitConverter.ToDouble(value, startIndex),
-                (float)BitConverter.ToDouble(value, startIndex + 8),
-                (float)BitConverter.ToDouble(value, startIndex + 16));
+                (Scalar)BitConverter.ToDouble(value, startIndex),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 8),
+                (Scalar)BitConverter.ToDouble(value, startIndex + 16));
         }
     }
 }

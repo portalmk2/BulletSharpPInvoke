@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class PolyhedralConvexShape : ConvexInternalShape
@@ -35,12 +42,12 @@ namespace BulletSharp
 				shiftVerticesByMargin);
 		}
 
-		public bool IsInsideRef(ref Vector3 pt, float tolerance)
+		public bool IsInsideRef(ref Vector3 pt, Scalar tolerance)
 		{
 			return btPolyhedralConvexShape_isInside(Native, ref pt, tolerance);
 		}
 
-		public bool IsInside(Vector3 pt, float tolerance)
+		public bool IsInside(Vector3 pt, Scalar tolerance)
 		{
 			return btPolyhedralConvexShape_isInside(Native, ref pt, tolerance);
 		}
@@ -82,14 +89,14 @@ namespace BulletSharp
 		}
 
 		public void GetNonvirtualAabbRef(ref Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
-			float margin)
+			Scalar margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,
 				out aabbMin, out aabbMax, margin);
 		}
 
 		public void GetNonvirtualAabb(Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
-			float margin)
+			Scalar margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,
 				out aabbMin, out aabbMax, margin);

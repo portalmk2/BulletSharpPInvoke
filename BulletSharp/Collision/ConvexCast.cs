@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class ConvexCast : IDisposable
@@ -22,7 +29,7 @@ namespace BulletSharp
 				Native = btConvexCast_CastResult_new();
 			}
 
-			public void DebugDraw(float fraction)
+			public void DebugDraw(Scalar fraction)
 			{
 				btConvexCast_CastResult_DebugDraw(Native, fraction);
 			}
@@ -37,7 +44,7 @@ namespace BulletSharp
 				btConvexCast_CastResult_reportFailure(Native, errNo, numIterations);
 			}
 
-			public float AllowedPenetration
+			public Scalar AllowedPenetration
 			{
 				get => btConvexCast_CastResult_getAllowedPenetration(Native);
 				set => btConvexCast_CastResult_setAllowedPenetration(Native, value);
@@ -53,7 +60,7 @@ namespace BulletSharp
 				}
 			}
 
-			public float Fraction
+			public Scalar Fraction
 			{
 				get => btConvexCast_CastResult_getFraction(Native);
 				set => btConvexCast_CastResult_setFraction(Native, value);

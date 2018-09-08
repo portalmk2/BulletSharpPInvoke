@@ -4,6 +4,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class TriangleCallback : IDisposable
@@ -25,7 +32,7 @@ namespace BulletSharp
 
 		private void ProcessTriangleUnmanaged(IntPtr triangle, int partId, int triangleIndex)
 		{
-			float[] triangleData = new float[11];
+			Scalar[] triangleData = new Scalar[11];
 			Marshal.Copy(triangle, triangleData, 0, 11);
 			Vector3 p0 = new Vector3(triangleData[0], triangleData[1], triangleData[2]);
 			Vector3 p1 = new Vector3(triangleData[4], triangleData[5], triangleData[6]);
@@ -75,7 +82,7 @@ namespace BulletSharp
 
 		private void InternalProcessTriangleIndexUnmanaged(IntPtr triangle, int partId, int triangleIndex)
 		{
-			float[] triangleData = new float[11];
+			Scalar[] triangleData = new Scalar[11];
 			Marshal.Copy(triangle, triangleData, 0, 11);
 			Vector3 p0 = new Vector3(triangleData[0], triangleData[1], triangleData[2]);
 			Vector3 p1 = new Vector3(triangleData[4], triangleData[5], triangleData[6]);

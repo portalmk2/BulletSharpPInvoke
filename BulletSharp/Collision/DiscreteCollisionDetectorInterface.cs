@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class DiscreteCollisionDetectorInterface : IDisposable
@@ -15,7 +22,7 @@ namespace BulletSharp
 				Native = btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
 			}
 
-			public float MaximumDistanceSquared
+			public Scalar MaximumDistanceSquared
 			{
 				get => btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(Native);
 				set => btDiscreteCollisionDetectorInterface_ClosestPointInput_setMaximumDistanceSquared(Native, value);
@@ -74,7 +81,7 @@ namespace BulletSharp
 			}
 
 			public void AddContactPoint(Vector3 normalOnBInWorld, Vector3 pointInWorld,
-				float depth)
+				Scalar depth)
 			{
 				btDiscreteCollisionDetectorInterface_Result_addContactPoint(Native,
 					ref normalOnBInWorld, ref pointInWorld, depth);
@@ -171,7 +178,7 @@ namespace BulletSharp
 			set => btStorageResult_setClosestPointInB(Native, ref value);
 		}
 
-		public float Distance
+		public Scalar Distance
 		{
 			get => btStorageResult_getDistance(Native);
 			set => btStorageResult_setDistance(Native, value);

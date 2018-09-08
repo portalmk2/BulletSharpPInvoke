@@ -2,6 +2,13 @@
 using BulletSharp.Math;
 using System;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharpTest
 {
     public sealed class PhysicsContext : IDisposable

@@ -1,6 +1,13 @@
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class Box2DShape : PolyhedralConvexShape
@@ -13,12 +20,12 @@ namespace BulletSharp
 		{
 		}
 
-		public Box2DShape(float boxHalfExtent)
+		public Box2DShape(Scalar boxHalfExtent)
 			: base(btBox2dShape_new2(boxHalfExtent))
 		{
 		}
 
-		public Box2DShape(float boxHalfExtentX, float boxHalfExtentY, float boxHalfExtentZ)
+		public Box2DShape(Scalar boxHalfExtentX, Scalar boxHalfExtentY, Scalar boxHalfExtentZ)
 			: base(btBox2dShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ))
 		{
 		}

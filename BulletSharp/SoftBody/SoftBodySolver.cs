@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp.SoftBody
 {
 	public class SoftBodySolver : IDisposable
@@ -69,7 +76,7 @@ namespace BulletSharp.SoftBody
 			get { return btSoftBodySolver_getSolverType(_native); }
 		}
 		*/
-		public float TimeScale => btSoftBodySolver_getTimeScale(_native);
+		public Scalar TimeScale => btSoftBodySolver_getTimeScale(_native);
 
 		public void Dispose()
 		{

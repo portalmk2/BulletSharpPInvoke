@@ -5,6 +5,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class IndexedMesh : IDisposable
@@ -24,7 +31,7 @@ namespace BulletSharp
 			Native = btIndexedMesh_new();
 		}
 
-		public void Allocate(int numTriangles, int numVertices, int triangleIndexStride = sizeof(int) * 3, int vertexStride = sizeof(float) * 3)
+		public void Allocate(int numTriangles, int numVertices, int triangleIndexStride = sizeof(int) * 3, int vertexStride = sizeof(Scalar) * 3)
 		{
 			if (_ownsData)
 			{
@@ -48,9 +55,13 @@ namespace BulletSharp
 					IndexType = PhyScalarType.Int32;
 					break;
 			}
-			VertexType = PhyScalarType.Single;
+#if BT_USE_DOUBLE_PRECISION
+            VertexType = PhyScalarType.Double;
+#else
+            VertexType = PhyScalarType.Single;
+#endif
 
-			NumTriangles = numTriangles;
+            NumTriangles = numTriangles;
 			TriangleIndexBase = Marshal.AllocHGlobal(numTriangles * triangleIndexStride);
 			TriangleIndexStride = triangleIndexStride;
 			NumVertices = numVertices;
@@ -80,14 +91,14 @@ namespace BulletSharp
 			return new UnmanagedMemoryStream((byte*)btIndexedMesh_getVertexBase(Native).ToPointer(), length, length, FileAccess.ReadWrite);
 		}
 
-		public void SetData(ICollection<int> triangles, ICollection<float> vertices)
+		public void SetData(ICollection<int> triangles, ICollection<Scalar> vertices)
 		{
 			SetTriangles(triangles);
 
-			float[] vertexArray = vertices as float[];
+			Scalar[] vertexArray = vertices as Scalar[];
 			if (vertexArray == null)
 			{
-				vertexArray = new float[vertices.Count];
+				vertexArray = new Scalar[vertices.Count];
 				vertices.CopyTo(vertexArray, 0);
 			}
 			Marshal.Copy(vertexArray, 0, VertexBase, vertices.Count);
@@ -97,7 +108,7 @@ namespace BulletSharp
 		{
 			SetTriangles(triangles);
 
-			float[] vertexArray = new float[vertices.Count * 3];
+			Scalar[] vertexArray = new Scalar[vertices.Count * 3];
 			int i = 0;
 			foreach (Vector3 v in vertices)
 			{
@@ -209,7 +220,7 @@ namespace BulletSharp
 		{
 		}
 
-		public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<float> vertices)
+		public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<Scalar> vertices)
 			: base(btTriangleIndexVertexArray_new())
 		{
 			_initialMesh = new IndexedMesh();

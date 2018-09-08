@@ -1,10 +1,17 @@
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class UniformScalingShape : ConvexShape
 	{
-		public UniformScalingShape(ConvexShape convexChildShape, float uniformScalingFactor)
+		public UniformScalingShape(ConvexShape convexChildShape, Scalar uniformScalingFactor)
 			: base(btUniformScalingShape_new(convexChildShape.Native, uniformScalingFactor))
 		{
 			ChildShape = convexChildShape;
@@ -12,7 +19,7 @@ namespace BulletSharp
 
 		public ConvexShape ChildShape { get; }
 
-		public float UniformScalingFactor
+		public Scalar UniformScalingFactor
 		{
 			get { return btUniformScalingShape_getUniformScalingFactor(Native); }
 		}

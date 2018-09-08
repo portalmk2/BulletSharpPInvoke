@@ -3,6 +3,13 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class ContactConstraint : TypedConstraint

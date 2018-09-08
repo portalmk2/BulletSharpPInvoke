@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class DbvtProxy : BroadphaseProxy
@@ -148,7 +155,7 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setPid(Native, value);
 		}
 
-		public float Prediction
+		public Scalar Prediction
 		{
 			get => btDbvtBroadphase_getPrediction(Native);
 			set => btDbvtBroadphase_setPrediction(Native, value);
@@ -182,13 +189,13 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setUpdates_done(Native, value);
 		}
 
-		public float UpdatesRatio
+		public Scalar UpdatesRatio
 		{
 			get => btDbvtBroadphase_getUpdates_ratio(Native);
 			set => btDbvtBroadphase_setUpdates_ratio(Native, value);
 		}
 
-		public float VelocityPrediction
+		public Scalar VelocityPrediction
 		{
 			get => btDbvtBroadphase_getVelocityPrediction(Native);
 			set => btDbvtBroadphase_setVelocityPrediction(Native, value);

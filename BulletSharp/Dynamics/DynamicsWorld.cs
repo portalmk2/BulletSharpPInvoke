@@ -5,6 +5,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum DynamicsWorldType
@@ -18,10 +25,10 @@ namespace BulletSharp
 
 	public abstract class DynamicsWorld : CollisionWorld
 	{
-		public delegate void InternalTickCallback(DynamicsWorld world, float timeStep);
+		public delegate void InternalTickCallback(DynamicsWorld world, Scalar timeStep);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		delegate void InternalTickCallbackUnmanaged(IntPtr world, float timeStep);
+		delegate void InternalTickCallbackUnmanaged(IntPtr world, Scalar timeStep);
 
 		private InternalTickCallback _preTickCallback;
 		private InternalTickCallback _postTickCallback;
@@ -160,12 +167,12 @@ namespace BulletSharp
 			btDynamicsWorld_setGravity(Native, ref gravity);
 		}
 
-		private void InternalPreTickCallbackNative(IntPtr world, float timeStep)
+		private void InternalPreTickCallbackNative(IntPtr world, Scalar timeStep)
 		{
 			_preTickCallback(this, timeStep);
 		}
 
-		private void InternalPostTickCallbackNative(IntPtr world, float timeStep)
+		private void InternalPostTickCallbackNative(IntPtr world, Scalar timeStep)
 		{
 			_postTickCallback(this, timeStep);
 		}
@@ -228,7 +235,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int StepSimulation(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f)
+		public int StepSimulation(Scalar timeStep, int maxSubSteps = 1, Scalar fixedTimeStep = 1.0f / 60.0f)
 		{
 			return btDynamicsWorld_stepSimulation(Native, timeStep, maxSubSteps,
 				fixedTimeStep);

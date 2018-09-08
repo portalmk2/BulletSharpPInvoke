@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class CylinderShape : ConvexInternalShape
@@ -17,7 +24,7 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShape(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShape(Scalar halfExtentX, Scalar halfExtentY, Scalar halfExtentZ)
 			: base(btCylinderShape_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}
@@ -42,7 +49,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float Radius => btCylinderShape_getRadius(Native);
+		public Scalar Radius => btCylinderShape_getRadius(Native);
 
 		public int UpAxis => btCylinderShape_getUpAxis(Native);
 	}
@@ -54,7 +61,7 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShapeX(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShapeX(Scalar halfExtentX, Scalar halfExtentY, Scalar halfExtentZ)
 			: base(btCylinderShapeX_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}
@@ -67,7 +74,7 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShapeZ(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShapeZ(Scalar halfExtentX, Scalar halfExtentY, Scalar halfExtentZ)
 			: base(btCylinderShapeZ_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}

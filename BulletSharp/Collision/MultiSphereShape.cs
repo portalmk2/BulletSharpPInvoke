@@ -4,16 +4,23 @@ using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 using System.Runtime.InteropServices;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class MultiSphereShape : ConvexInternalAabbCachingShape
 	{
-		public MultiSphereShape(Vector3[] positions, float[] radi)
+		public MultiSphereShape(Vector3[] positions, Scalar[] radi)
 			: base(btMultiSphereShape_new(positions, radi, (radi.Length < positions.Length) ? radi.Length : positions.Length))
 		{
 		}
 
-		public MultiSphereShape(Vector3Array positions, float[] radi)
+		public MultiSphereShape(Vector3Array positions, Scalar[] radi)
 			: base(btMultiSphereShape_new2(positions._native, radi, (radi.Length < positions.Count) ? radi.Length : positions.Count))
 		{
 		}
@@ -25,7 +32,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public float GetSphereRadius(int index)
+		public Scalar GetSphereRadius(int index)
 		{
 			return btMultiSphereShape_getSphereRadius(Native, index);
 		}
@@ -79,7 +86,7 @@ namespace BulletSharp
 	internal struct PositionAndRadius
 	{
 		public Vector3FloatData Position;
-		public float Radius;
+		public Scalar Radius;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(PositionAndRadius), fieldName).ToInt32(); }
 	}

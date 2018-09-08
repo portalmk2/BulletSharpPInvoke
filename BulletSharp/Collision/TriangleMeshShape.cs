@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class TriangleMeshShape : ConcaveShape
@@ -86,7 +93,7 @@ namespace BulletSharp
 		public IntPtr QuantizedFloatBvh;
 		public IntPtr QuantizedDoubleBvh;
 		public IntPtr TriangleInfoMap;
-		public float CollisionMargin;
+		public Scalar CollisionMargin;
 		public int Pad;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TriangleMeshShapeData), fieldName).ToInt32(); }

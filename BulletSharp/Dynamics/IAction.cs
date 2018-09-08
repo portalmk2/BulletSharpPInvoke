@@ -3,12 +3,19 @@ using System.Runtime.InteropServices;
 using System.Security;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public interface IAction
 	{
 		void DebugDraw(DebugDraw debugDrawer);
-		void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
+		void UpdateAction(CollisionWorld collisionWorld, Scalar deltaTimeStep);
 	}
 
 	internal class ActionInterfaceWrapper : IDisposable
@@ -20,7 +27,7 @@ namespace BulletSharp
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
+		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, Scalar deltaTimeStep);
 
 		private DebugDrawUnmanagedDelegate _debugDraw;
 		private UpdateActionUnmanagedDelegate _updateAction;
@@ -43,7 +50,7 @@ namespace BulletSharp
 			_actionInterface.DebugDraw(DebugDraw.GetManaged(debugDrawer));
 		}
 
-		private void UpdateActionUnmanaged(IntPtr collisionWorld, float deltaTimeStep)
+		private void UpdateActionUnmanaged(IntPtr collisionWorld, Scalar deltaTimeStep)
 		{
 			_actionInterface.UpdateAction(_world, deltaTimeStep);
 		}

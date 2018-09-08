@@ -1,5 +1,12 @@
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class MultiBodyConstraintSolver : SequentialImpulseConstraintSolver
@@ -9,7 +16,7 @@ namespace BulletSharp
 		{
 		}
 		/*
-		public float SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,
+		public Scalar SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,
 			ContactSolverInfo infoGlobal)
 		{
 			return btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(Native,

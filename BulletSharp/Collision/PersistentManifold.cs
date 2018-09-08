@@ -4,6 +4,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     public delegate void ContactDestroyedEventHandler(Object userPersistantData);
@@ -94,7 +101,7 @@ namespace BulletSharp
         }
 
         public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
-            float contactBreakingThreshold, float contactProcessingThreshold)
+            Scalar contactBreakingThreshold, Scalar contactProcessingThreshold)
         {
             Native = btPersistentManifold_new2(body0.Native, body1.Native, __unnamed2,
                 contactBreakingThreshold, contactProcessingThreshold);
@@ -172,13 +179,13 @@ namespace BulletSharp
             set => btPersistentManifold_setCompanionIdB(Native, value);
         }
 
-        public float ContactBreakingThreshold
+        public Scalar ContactBreakingThreshold
         {
             get => btPersistentManifold_getContactBreakingThreshold(Native);
             set => btPersistentManifold_setContactBreakingThreshold(Native, value);
         }
 
-        public float ContactProcessingThreshold
+        public Scalar ContactProcessingThreshold
         {
             get => btPersistentManifold_getContactProcessingThreshold(Native);
             set => btPersistentManifold_setContactProcessingThreshold(Native, value);
@@ -309,17 +316,17 @@ namespace BulletSharp
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Vector3FloatData[] PointCacheLateralFrictionDir2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheDistance;
+        Scalar[] PointCacheDistance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheAppliedImpulse;
+        Scalar[] PointCacheAppliedImpulse;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedFriction;
+        Scalar[] PointCacheCombinedFriction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedRollingFriction;
+        Scalar[] PointCacheCombinedRollingFriction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedSpinningFriction;
+        Scalar[] PointCacheCombinedSpinningFriction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedRestitution;
+        Scalar[] PointCacheCombinedRestitution;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         int[] PointCachePartId0;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -331,23 +338,23 @@ namespace BulletSharp
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         int[] PointCacheContactPointFlags;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheAppliedImpulseLateral1;
+        Scalar[] PointCacheAppliedImpulseLateral1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheAppliedImpulseLateral2;
+        Scalar[] PointCacheAppliedImpulseLateral2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheContactMotion1;
+        Scalar[] PointCacheContactMotion1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheContactMotion2;
+        Scalar[] PointCacheContactMotion2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheContactCfm;
+        Scalar[] PointCacheContactCfm;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedContactStiffness1;
+        Scalar[] PointCacheCombinedContactStiffness1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheContactErp;
+        Scalar[] PointCacheContactErp;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheCombinedContactDamping1;
+        Scalar[] PointCacheCombinedContactDamping1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        float[] PointCacheFrictionCfm;
+        Scalar[] PointCacheFrictionCfm;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         int[] PointCacheLifeTime;
         int NumCachedPoints;
@@ -355,8 +362,8 @@ namespace BulletSharp
         int CompanionIdB;
         int Index1a;
         int ObjectType;
-        float ContactBreakingThreshold;
-        float ContactProcessingThreshold;
+        Scalar ContactBreakingThreshold;
+        Scalar ContactProcessingThreshold;
         int Padding;
         IntPtr Body0;
         IntPtr Body1;

@@ -5,6 +5,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+    using Scalar = System.Double;
+#else
+    using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public abstract class BroadphaseAabbCallback : IDisposable
@@ -68,7 +75,7 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_process));
 		}
 
-		public float LambdaMax
+		public Scalar LambdaMax
 		{
 			get => btBroadphaseRayCallback_getLambda_max(Native);
 			set => btBroadphaseRayCallback_setLambda_max(Native, value);

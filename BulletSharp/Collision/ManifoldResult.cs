@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class ManifoldResult : DiscreteCollisionDetectorInterface.Result
@@ -20,31 +27,31 @@ namespace BulletSharp
 		{
 		}
 
-		public static float CalculateCombinedContactDamping(CollisionObject body0,
+		public static Scalar CalculateCombinedContactDamping(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedContactDamping(body0.Native,
 				body1.Native);
 		}
 
-		public static float CalculateCombinedContactStiffness(CollisionObject body0,
+		public static Scalar CalculateCombinedContactStiffness(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedContactStiffness(body0.Native,
 				body1.Native);
 		}
 
-		public static float CalculateCombinedFriction(CollisionObject body0, CollisionObject body1)
+		public static Scalar CalculateCombinedFriction(CollisionObject body0, CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedFriction(body0.Native, body1.Native);
 		}
 
-		public static float CalculateCombinedRestitution(CollisionObject body0, CollisionObject body1)
+		public static Scalar CalculateCombinedRestitution(CollisionObject body0, CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedRestitution(body0.Native, body1.Native);
 		}
 
-		public static float CalculateCombinedRollingFriction(CollisionObject body0,
+		public static Scalar CalculateCombinedRollingFriction(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedRollingFriction(body0.Native,
@@ -72,7 +79,7 @@ namespace BulletSharp
 			set => btManifoldResult_setBody1Wrap(Native, value.Native);
 		}
 
-		public float ClosestPointDistanceThreshold
+		public Scalar ClosestPointDistanceThreshold
 		{
 			get => btManifoldResult_getClosestPointDistanceThreshold(Native);
 			set => btManifoldResult_setClosestPointDistanceThreshold(Native, value);

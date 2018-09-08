@@ -2,6 +2,13 @@ using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class GhostObject : CollisionObject
@@ -25,14 +32,14 @@ namespace BulletSharp
 		}
 
 		public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix convexFromWorld,
-			ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+			ref Matrix convexToWorld, ConvexResultCallback resultCallback, Scalar allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);
 		}
 
 		public void ConvexSweepTest(ConvexShape castShape, Matrix convexFromWorld,
-			Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+			Matrix convexToWorld, ConvexResultCallback resultCallback, Scalar allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);

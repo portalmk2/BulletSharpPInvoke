@@ -2,6 +2,13 @@ using System;
 using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+    using Scalar = System.Double;
+#else
+    using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class CapsuleShape : ConvexInternalShape
@@ -11,21 +18,21 @@ namespace BulletSharp
 		{
 		}
 
-		public CapsuleShape(float radius, float height)
+		public CapsuleShape(Scalar radius, Scalar height)
 			: base(btCapsuleShape_new(radius, height))
 		{
 		}
 
-		public float HalfHeight => btCapsuleShape_getHalfHeight(Native);
+		public Scalar HalfHeight => btCapsuleShape_getHalfHeight(Native);
 
-		public float Radius => btCapsuleShape_getRadius(Native);
+		public Scalar Radius => btCapsuleShape_getRadius(Native);
 
 		public int UpAxis => btCapsuleShape_getUpAxis(Native);
 	}
 
 	public class CapsuleShapeX : CapsuleShape
 	{
-		public CapsuleShapeX(float radius, float height)
+		public CapsuleShapeX(Scalar radius, Scalar height)
 			: base(btCapsuleShapeX_new(radius, height))
 		{
 		}
@@ -33,7 +40,7 @@ namespace BulletSharp
 
 	public class CapsuleShapeZ : CapsuleShape
 	{
-		public CapsuleShapeZ(float radius, float height)
+		public CapsuleShapeZ(Scalar radius, Scalar height)
 			: base(btCapsuleShapeZ_new(radius, height))
 		{
 		}

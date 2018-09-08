@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class MultiBodySolverConstraint : IDisposable
@@ -38,19 +45,19 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setAngularComponentB(Native, ref value);
 		}
 
-		public float AppliedImpulse
+		public Scalar AppliedImpulse
 		{
 			get => btMultiBodySolverConstraint_getAppliedImpulse(Native);
 			set => btMultiBodySolverConstraint_setAppliedImpulse(Native, value);
 		}
 
-		public float AppliedPushImpulse
+		public Scalar AppliedPushImpulse
 		{
 			get => btMultiBodySolverConstraint_getAppliedPushImpulse(Native);
 			set => btMultiBodySolverConstraint_setAppliedPushImpulse(Native, value);
 		}
 
-		public float Cfm
+		public Scalar Cfm
 		{
 			get => btMultiBodySolverConstraint_getCfm(Native);
 			set => btMultiBodySolverConstraint_setCfm(Native, value);
@@ -90,7 +97,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setDeltaVelBindex(Native, value);
 		}
 
-		public float Friction
+		public Scalar Friction
 		{
 			get => btMultiBodySolverConstraint_getFriction(Native);
 			set => btMultiBodySolverConstraint_setFriction(Native, value);
@@ -114,7 +121,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setJacBindex(Native, value);
 		}
 
-		public float JacDiagABInv
+		public Scalar JacDiagABInv
 		{
 			get => btMultiBodySolverConstraint_getJacDiagABInv(Native);
 			set => btMultiBodySolverConstraint_setJacDiagABInv(Native, value);
@@ -132,7 +139,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setLinkB(Native, value);
 		}
 
-		public float LowerLimit
+		public Scalar LowerLimit
 		{
 			get => btMultiBodySolverConstraint_getLowerLimit(Native);
 			set => btMultiBodySolverConstraint_setLowerLimit(Native, value);
@@ -218,13 +225,13 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setRelpos2CrossNormal(Native, ref value);
 		}
 
-		public float Rhs
+		public Scalar Rhs
 		{
 			get => btMultiBodySolverConstraint_getRhs(Native);
 			set => btMultiBodySolverConstraint_setRhs(Native, value);
 		}
 
-		public float RhsPenetration
+		public Scalar RhsPenetration
 		{
 			get => btMultiBodySolverConstraint_getRhsPenetration(Native);
 			set => btMultiBodySolverConstraint_setRhsPenetration(Native, value);
@@ -242,13 +249,13 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setSolverBodyIdB(Native, value);
 		}
 
-		public float UnusedPadding4
+		public Scalar UnusedPadding4
 		{
 			get => btMultiBodySolverConstraint_getUnusedPadding4(Native);
 			set => btMultiBodySolverConstraint_setUnusedPadding4(Native, value);
 		}
 
-		public float UpperLimit
+		public Scalar UpperLimit
 		{
 			get => btMultiBodySolverConstraint_getUpperLimit(Native);
 			set => btMultiBodySolverConstraint_setUpperLimit(Native, value);

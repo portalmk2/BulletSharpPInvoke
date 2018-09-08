@@ -1,6 +1,13 @@
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum ConstraintSolverType
@@ -36,7 +43,7 @@ namespace BulletSharp
 			btConstraintSolver_reset(Native);
 		}
 		/*
-		public float SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
+		public Scalar SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
 			int numManifolds, TypedConstraint constraints, int numConstraints, ContactSolverInfo info,
 			IDebugDraw debugDrawer, Dispatcher dispatcher)
 		{

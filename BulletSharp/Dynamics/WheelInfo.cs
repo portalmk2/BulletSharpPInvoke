@@ -1,22 +1,29 @@
 using System;
 using BulletSharp.Math;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public struct WheelInfoConstructionInfo
 	{
         public bool IsFrontWheel;
         public Vector3 ChassisConnectionCS;
-        public float FrictionSlip;
-        public float MaxSuspensionForce;
-        public float MaxSuspensionTravelCm;
-        public float SuspensionRestLength;
-        public float SuspensionStiffness;
+        public Scalar FrictionSlip;
+        public Scalar MaxSuspensionForce;
+        public Scalar MaxSuspensionTravelCm;
+        public Scalar SuspensionRestLength;
+        public Scalar SuspensionStiffness;
         public Vector3 WheelAxleCS;
         public Vector3 WheelDirectionCS;
-        public float WheelRadius;
-        public float WheelsDampingCompression;
-        public float WheelsDampingRelaxation;
+        public Scalar WheelRadius;
+        public Scalar WheelsDampingCompression;
+        public Scalar WheelsDampingRelaxation;
 	}
 
     public struct RaycastInfo
@@ -26,7 +33,7 @@ namespace BulletSharp
         public Object GroundObject;
         public Vector3 HardPointWS;
         public bool IsInContact;
-        public float SuspensionLength;
+        public Scalar SuspensionLength;
         public Vector3 WheelAxleWS;
         public Vector3 WheelDirectionWS;
     }
@@ -68,11 +75,11 @@ namespace BulletSharp
         {
             if (raycastInfo.IsInContact)
             {
-                float project = Vector3.Dot(raycastInfo.ContactNormalWS, raycastInfo.WheelDirectionWS);
+                Scalar project = Vector3.Dot(raycastInfo.ContactNormalWS, raycastInfo.WheelDirectionWS);
                 Vector3 chassis_velocity_at_contactPoint;
                 Vector3 relpos = raycastInfo.ContactPointWS - chassis.CenterOfMassPosition;
                 chassis_velocity_at_contactPoint = chassis.GetVelocityInLocalPoint(relpos);
-                float projVel = Vector3.Dot(raycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
+                Scalar projVel = Vector3.Dot(raycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
                 if (project >= -0.1f)
                 {
                     SuspensionRelativeVelocity = 0;
@@ -80,7 +87,7 @@ namespace BulletSharp
                 }
                 else
                 {
-                    float inv = -1.0f / project;
+                    Scalar inv = -1.0f / project;
                     SuspensionRelativeVelocity = projVel * inv;
                     ClippedInvContactDotSuspension = inv;
                 }
@@ -96,35 +103,35 @@ namespace BulletSharp
             }
         }
 
-        public float SuspensionRestLength
+        public Scalar SuspensionRestLength
         {
             get { return SuspensionRestLength1; }
         }
 
         public bool IsFrontWheel;
-        public float Brake;
+        public Scalar Brake;
         public Vector3 ChassisConnectionPointCS;
         public IntPtr ClientInfo;
-        public float ClippedInvContactDotSuspension;
-        public float DeltaRotation;
-        public float EngineForce;
-        public float FrictionSlip;
-        public float MaxSuspensionForce;
-        public float MaxSuspensionTravelCm;
+        public Scalar ClippedInvContactDotSuspension;
+        public Scalar DeltaRotation;
+        public Scalar EngineForce;
+        public Scalar FrictionSlip;
+        public Scalar MaxSuspensionForce;
+        public Scalar MaxSuspensionTravelCm;
         public RaycastInfo RaycastInfo;
-        public float RollInfluence;
-        public float Rotation;
-        public float SkidInfo;
-        public float Steering;
-        public float SuspensionRelativeVelocity;
-        public float SuspensionRestLength1;
-        public float SuspensionStiffness;
+        public Scalar RollInfluence;
+        public Scalar Rotation;
+        public Scalar SkidInfo;
+        public Scalar Steering;
+        public Scalar SuspensionRelativeVelocity;
+        public Scalar SuspensionRestLength1;
+        public Scalar SuspensionStiffness;
         public Vector3 WheelAxleCS;
         public Vector3 WheelDirectionCS;
-        public float WheelsDampingCompression;
-        public float WheelsDampingRelaxation;
-        public float WheelsRadius;
-        public float WheelsSuspensionForce;
+        public Scalar WheelsDampingCompression;
+        public Scalar WheelsDampingRelaxation;
+        public Scalar WheelsRadius;
+        public Scalar WheelsSuspensionForce;
         public Matrix WorldTransform;
     }
 }

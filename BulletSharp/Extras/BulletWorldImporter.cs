@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
-	public class BulletWorldImporter : WorldImporter
+#if !BT_USE_DOUBLE_PRECISION
+    public class BulletWorldImporter : WorldImporter
 	{
 		public BulletWorldImporter(DynamicsWorld world)
 			: base(world)
@@ -278,4 +286,5 @@ namespace BulletSharp
             return ConvertAllObjects(bulletFile);
 		}
 	}
+#endif
 }

@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum ConstraintParam
@@ -155,25 +162,25 @@ namespace BulletSharp
 				_native = btTypedConstraint_btConstraintInfo2_new();
 			}
 			/*
-			public float Cfm
+			public Scalar Cfm
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getCfm(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setCfm(_native, value._native); }
 			}
 
-			public float ConstraintError
+			public Scalar ConstraintError
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getConstraintError(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setConstraintError(_native, value._native); }
 			}
 			*/
-			public float Damping
+			public Scalar Damping
 			{
 				get => btTypedConstraint_btConstraintInfo2_getDamping(_native);
 				set => btTypedConstraint_btConstraintInfo2_setDamping(_native, value);
 			}
 
-			public float Erp
+			public Scalar Erp
 			{
 				get => btTypedConstraint_btConstraintInfo2_getErp(_native);
 				set => btTypedConstraint_btConstraintInfo2_setErp(_native, value);
@@ -185,37 +192,37 @@ namespace BulletSharp
 				set { btTypedConstraint_btConstraintInfo2_setFindex(_native, value._native); }
 			}
 			*/
-			public float Fps
+			public Scalar Fps
 			{
 				get => btTypedConstraint_btConstraintInfo2_getFps(_native);
 				set => btTypedConstraint_btConstraintInfo2_setFps(_native, value);
 			}
 			/*
-			public float J1angularAxis
+			public Scalar J1angularAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ1angularAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ1angularAxis(_native, value._native); }
 			}
 
-			public float J1linearAxis
+			public Scalar J1linearAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ1linearAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ1linearAxis(_native, value._native); }
 			}
 
-			public float J2angularAxis
+			public Scalar J2angularAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ2angularAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ2angularAxis(_native, value._native); }
 			}
 
-			public float J2linearAxis
+			public Scalar J2linearAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ2linearAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ2linearAxis(_native, value._native); }
 			}
 
-			public float LowerLimit
+			public Scalar LowerLimit
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getLowerLimit(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setLowerLimit(_native, value._native); }
@@ -233,7 +240,7 @@ namespace BulletSharp
 				set => btTypedConstraint_btConstraintInfo2_setRowskip(_native, value);
 			}
 			/*
-			public float UpperLimit
+			public Scalar UpperLimit
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getUpperLimit(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setUpperLimit(_native, value._native); }
@@ -311,22 +318,22 @@ namespace BulletSharp
 			btTypedConstraint_getInfo2(Native, info._native);
 		}
 
-		public float GetParam(ConstraintParam num)
+		public Scalar GetParam(ConstraintParam num)
 		{
 			return btTypedConstraint_getParam(Native, num);
 		}
 
-		public float GetParam(ConstraintParam num, int axis)
+		public Scalar GetParam(ConstraintParam num, int axis)
 		{
 			return btTypedConstraint_getParam2(Native, num, axis);
 		}
 
-		public float InternalGetAppliedImpulse()
+		public Scalar InternalGetAppliedImpulse()
 		{
 			return btTypedConstraint_internalGetAppliedImpulse(Native);
 		}
 
-		public void InternalSetAppliedImpulse(float appliedImpulse)
+		public void InternalSetAppliedImpulse(Scalar appliedImpulse)
 		{
 			btTypedConstraint_internalSetAppliedImpulse(Native, appliedImpulse);
 		}
@@ -336,33 +343,33 @@ namespace BulletSharp
 			return Marshal.PtrToStringAnsi(btTypedConstraint_serialize(Native, dataBuffer, serializer._native));
 		}
 
-		public void SetParam(ConstraintParam num, float value)
+		public void SetParam(ConstraintParam num, Scalar value)
 		{
 			btTypedConstraint_setParam(Native, num, value);
 		}
 
-		public void SetParam(ConstraintParam num, float value, int axis)
+		public void SetParam(ConstraintParam num, Scalar value, int axis)
 		{
 			btTypedConstraint_setParam2(Native, num, value, axis);
 		}
 		/*
 		public void SetupSolverConstraint(btAlignedObjectArray<btSolverConstraint> ca,
-			int solverBodyA, int solverBodyB, float timeStep)
+			int solverBodyA, int solverBodyB, Scalar timeStep)
 		{
 			btTypedConstraint_setupSolverConstraint(_native, ca._native, solverBodyA,
 				solverBodyB, timeStep);
 		}
 
 		public void SolveConstraintObsolete(SolverBody __unnamed0, SolverBody __unnamed1,
-			float __unnamed2)
+			Scalar __unnamed2)
 		{
 			btTypedConstraint_solveConstraintObsolete(_native, __unnamed0._native,
 				__unnamed1._native, __unnamed2);
 		}
 		*/
-		public float AppliedImpulse => btTypedConstraint_getAppliedImpulse(Native);
+		public Scalar AppliedImpulse => btTypedConstraint_getAppliedImpulse(Native);
 
-		public float BreakingImpulseThreshold
+		public Scalar BreakingImpulseThreshold
 		{
 			get => btTypedConstraint_getBreakingImpulseThreshold(Native);
 			set => btTypedConstraint_setBreakingImpulseThreshold(Native, value);
@@ -370,7 +377,7 @@ namespace BulletSharp
 
 		public TypedConstraintType ConstraintType => btTypedConstraint_getConstraintType(Native);
 
-		public float DebugDrawSize
+		public Scalar DebugDrawSize
 		{
 			get => btTypedConstraint_getDbgDrawSize(Native);
 			set => btTypedConstraint_setDbgDrawSize(Native, value);
@@ -458,41 +465,41 @@ namespace BulletSharp
 			Native = btAngularLimit_new();
 		}
 
-		public void Fit(ref float angle)
+		public void Fit(ref Scalar angle)
 		{
 			btAngularLimit_fit(Native, ref angle);
 		}
 
-		public void Set(float low, float high, float softness = 0.9f, float biasFactor = 0.3f,
-			float relaxationFactor = 1.0f)
+		public void Set(Scalar low, Scalar high, Scalar softness = 0.9f, Scalar biasFactor = 0.3f,
+			Scalar relaxationFactor = 1.0f)
 		{
 			btAngularLimit_set(Native, low, high, softness, biasFactor, relaxationFactor);
 		}
 
-		public void Test(float angle)
+		public void Test(Scalar angle)
 		{
 			btAngularLimit_test(Native, angle);
 		}
 
-		public float BiasFactor => btAngularLimit_getBiasFactor(Native);
+		public Scalar BiasFactor => btAngularLimit_getBiasFactor(Native);
 
-		public float Correction => btAngularLimit_getCorrection(Native);
+		public Scalar Correction => btAngularLimit_getCorrection(Native);
 
-		public float Error => btAngularLimit_getError(Native);
+		public Scalar Error => btAngularLimit_getError(Native);
 
-		public float HalfRange => btAngularLimit_getHalfRange(Native);
+		public Scalar HalfRange => btAngularLimit_getHalfRange(Native);
 
-		public float High => btAngularLimit_getHigh(Native);
+		public Scalar High => btAngularLimit_getHigh(Native);
 
 		public bool IsLimit => btAngularLimit_isLimit(Native);
 
-		public float Low => btAngularLimit_getLow(Native);
+		public Scalar Low => btAngularLimit_getLow(Native);
 
-		public float RelaxationFactor => btAngularLimit_getRelaxationFactor(Native);
+		public Scalar RelaxationFactor => btAngularLimit_getRelaxationFactor(Native);
 
-		public float Sign => btAngularLimit_getSign(Native);
+		public Scalar Sign => btAngularLimit_getSign(Native);
 
-		public float Softness => btAngularLimit_getSoftness(Native);
+		public Scalar Softness => btAngularLimit_getSoftness(Native);
 
 		public void Dispose()
 		{
@@ -528,11 +535,11 @@ namespace BulletSharp
 		public int UserConstraintType;
 		public int UserConstraintId;
 		public int NeedsFeedback;
-		public float AppliedImpulse;
-		public float DebugDrawSize;
+		public Scalar AppliedImpulse;
+		public Scalar DebugDrawSize;
 		public int DisableCollisionsBetweenLinkedBodies;
 		public int OverrideNumSolverIterations;
-		public float BreakingImpulseThreshold;
+		public Scalar BreakingImpulseThreshold;
 		public int IsEnabled;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintFloatData), fieldName).ToInt32(); }

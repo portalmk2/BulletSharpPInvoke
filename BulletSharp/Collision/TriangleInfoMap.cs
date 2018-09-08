@@ -2,6 +2,13 @@ using System;
 using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class TriangleInfo : IDisposable
@@ -18,19 +25,19 @@ namespace BulletSharp
 			_native = btTriangleInfo_new();
 		}
 
-		public float EdgeV0V1Angle
+		public Scalar EdgeV0V1Angle
 		{
 			get => btTriangleInfo_getEdgeV0V1Angle(_native);
 			set => btTriangleInfo_setEdgeV0V1Angle(_native, value);
 		}
 
-		public float EdgeV1V2Angle
+		public Scalar EdgeV1V2Angle
 		{
 			get => btTriangleInfo_getEdgeV1V2Angle(_native);
 			set => btTriangleInfo_setEdgeV1V2Angle(_native, value);
 		}
 
-		public float EdgeV2V0Angle
+		public Scalar EdgeV2V0Angle
 		{
 			get => btTriangleInfo_getEdgeV2V0Angle(_native);
 			set => btTriangleInfo_setEdgeV2V0Angle(_native, value);
@@ -94,37 +101,37 @@ namespace BulletSharp
 			return Marshal.PtrToStringAnsi(btTriangleInfoMap_serialize(Native, dataBuffer, serializer._native));
 		}
 
-		public float ConvexEpsilon
+		public Scalar ConvexEpsilon
 		{
 			get => btTriangleInfoMap_getConvexEpsilon(Native);
 			set => btTriangleInfoMap_setConvexEpsilon(Native, value);
 		}
 
-		public float EdgeDistanceThreshold
+		public Scalar EdgeDistanceThreshold
 		{
 			get => btTriangleInfoMap_getEdgeDistanceThreshold(Native);
 			set => btTriangleInfoMap_setEdgeDistanceThreshold(Native, value);
 		}
 
-		public float EqualVertexThreshold
+		public Scalar EqualVertexThreshold
 		{
 			get => btTriangleInfoMap_getEqualVertexThreshold(Native);
 			set => btTriangleInfoMap_setEqualVertexThreshold(Native, value);
 		}
 
-		public float MaxEdgeAngleThreshold
+		public Scalar MaxEdgeAngleThreshold
 		{
 			get => btTriangleInfoMap_getMaxEdgeAngleThreshold(Native);
 			set => btTriangleInfoMap_setMaxEdgeAngleThreshold(Native, value);
 		}
 
-		public float PlanarEpsilon
+		public Scalar PlanarEpsilon
 		{
 			get => btTriangleInfoMap_getPlanarEpsilon(Native);
 			set => btTriangleInfoMap_setPlanarEpsilon(Native, value);
 		}
 
-		public float ZeroAreaThreshold
+		public Scalar ZeroAreaThreshold
 		{
 			get => btTriangleInfoMap_getZeroAreaThreshold(Native);
 			set => btTriangleInfoMap_setZeroAreaThreshold(Native, value);

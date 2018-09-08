@@ -4,16 +4,23 @@ using System;
 using System.Diagnostics;
 using BulletSharp.Math;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     public class VehicleTuning
     {
-        public float SuspensionStiffness;
-        public float SuspensionCompression;
-        public float SuspensionDamping;
-        public float MaxSuspensionTravelCm;
-        public float FrictionSlip;
-        public float MaxSuspensionForce;
+        public Scalar SuspensionStiffness;
+        public Scalar SuspensionCompression;
+        public Scalar SuspensionDamping;
+        public Scalar MaxSuspensionTravelCm;
+        public Scalar FrictionSlip;
+        public Scalar MaxSuspensionForce;
 
         public VehicleTuning()
         {
@@ -32,8 +39,8 @@ namespace BulletSharp
 
         Vector3[] forwardWS = new Vector3[0];
         Vector3[] axle = new Vector3[0];
-        float[] forwardImpulse = new float[0];
-        float[] sideImpulse = new float[0];
+        Scalar[] forwardImpulse = new Scalar[0];
+        Scalar[] sideImpulse = new Scalar[0];
 
         public Matrix ChassisWorldTransform
         {
@@ -47,7 +54,7 @@ namespace BulletSharp
             }
         }
 
-        float currentVehicleSpeedKmHour;
+        Scalar currentVehicleSpeedKmHour;
 
         public int NumWheels
         {
@@ -73,18 +80,18 @@ namespace BulletSharp
 
         static RigidBody fixedBody;
 
-        public void SetBrake(float brake, int wheelIndex)
+        public void SetBrake(Scalar brake, int wheelIndex)
         {
             Debug.Assert((wheelIndex >= 0) && (wheelIndex < NumWheels));
             GetWheelInfo(wheelIndex).Brake = brake;
         }
 
-        public float GetSteeringValue(int wheel)
+        public Scalar GetSteeringValue(int wheel)
         {
             return GetWheelInfo(wheel).Steering;
         }
 
-        public void SetSteeringValue(float steering, int wheel)
+        public void SetSteeringValue(Scalar steering, int wheel)
         {
             Debug.Assert(wheel >= 0 && wheel < NumWheels);
 
@@ -120,7 +127,7 @@ namespace BulletSharp
             vehicleRaycaster = raycaster;
         }
 
-        public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, bool isFrontWheel)
+        public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, Scalar suspensionRestLength, Scalar wheelRadius, VehicleTuning tuning, bool isFrontWheel)
         {
             var ci = new WheelInfoConstructionInfo()
             {
@@ -147,21 +154,21 @@ namespace BulletSharp
             return wheel;
         }
 
-        public void ApplyEngineForce(float force, int wheel)
+        public void ApplyEngineForce(Scalar force, int wheel)
         {
             Debug.Assert(wheel >= 0 && wheel < NumWheels);
             WheelInfo wheelInfo = GetWheelInfo(wheel);
             wheelInfo.EngineForce = force;
         }
 
-        float CalcRollingFriction(RigidBody body0, RigidBody body1, Vector3 contactPosWorld, Vector3 frictionDirectionWorld, float maxImpulse)
+        Scalar CalcRollingFriction(RigidBody body0, RigidBody body1, Vector3 contactPosWorld, Vector3 frictionDirectionWorld, Scalar maxImpulse)
         {
-            float denom0 = body0.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
-            float denom1 = body1.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
-            const float relaxation = 1.0f;
-            float jacDiagABInv = relaxation / (denom0 + denom1);
+            Scalar denom0 = body0.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
+            Scalar denom1 = body1.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
+            const Scalar relaxation = 1.0f;
+            Scalar jacDiagABInv = relaxation / (denom0 + denom1);
 
-            float j1;
+            Scalar j1;
 
             Vector3 rel_pos1 = contactPosWorld - body0.CenterOfMassPosition;
             Vector3 rel_pos2 = contactPosWorld - body1.CenterOfMassPosition;
@@ -170,7 +177,7 @@ namespace BulletSharp
             Vector3 vel2 = body1.GetVelocityInLocalPoint(rel_pos2);
             Vector3 vel = vel1 - vel2;
 
-            float vrel;
+            Scalar vrel;
             Vector3.Dot(ref frictionDirectionWorld, ref vel, out vrel);
 
             // calculate j that moves us to zero relative velocity
@@ -224,19 +231,19 @@ namespace BulletSharp
             return wheelInfo[index];
         }
 
-        private float RayCast(WheelInfo wheel)
+        private Scalar RayCast(WheelInfo wheel)
         {
             UpdateWheelTransformsWS(wheel, false);
 
-            float depth = -1;
-            float raylen = wheel.SuspensionRestLength + wheel.WheelsRadius;
+            Scalar depth = -1;
+            Scalar raylen = wheel.SuspensionRestLength + wheel.WheelsRadius;
 
             Vector3 rayvector = wheel.RaycastInfo.WheelDirectionWS * raylen;
             Vector3 source = wheel.RaycastInfo.HardPointWS;
             wheel.RaycastInfo.ContactPointWS = source + rayvector;
             Vector3 target = wheel.RaycastInfo.ContactPointWS;
 
-            float param = 0;
+            Scalar param = 0;
             VehicleRaycasterResult rayResults = new VehicleRaycasterResult();
 
             Debug.Assert(vehicleRaycaster != null);
@@ -254,12 +261,12 @@ namespace BulletSharp
                 wheel.RaycastInfo.GroundObject = fixedBody;///@todo for driving on dynamic/movable objects!;
                 /////wheel.RaycastInfo.GroundObject = object;
 
-                float hitDistance = param * raylen;
+                Scalar hitDistance = param * raylen;
                 wheel.RaycastInfo.SuspensionLength = hitDistance - wheel.WheelsRadius;
                 //clamp on max suspension travel
 
-                float minSuspensionLength = wheel.SuspensionRestLength - wheel.MaxSuspensionTravelCm * 0.01f;
-                float maxSuspensionLength = wheel.SuspensionRestLength + wheel.MaxSuspensionTravelCm * 0.01f;
+                Scalar minSuspensionLength = wheel.SuspensionRestLength - wheel.MaxSuspensionTravelCm * 0.01f;
+                Scalar maxSuspensionLength = wheel.SuspensionRestLength + wheel.MaxSuspensionTravelCm * 0.01f;
                 if (wheel.RaycastInfo.SuspensionLength < minSuspensionLength)
                 {
                     wheel.RaycastInfo.SuspensionLength = minSuspensionLength;
@@ -271,14 +278,14 @@ namespace BulletSharp
 
                 wheel.RaycastInfo.ContactPointWS = rayResults.HitPointInWorld;
 
-                float denominator = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, wheel.RaycastInfo.WheelDirectionWS);
+                Scalar denominator = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, wheel.RaycastInfo.WheelDirectionWS);
 
                 Vector3 chassis_velocity_at_contactPoint;
                 Vector3 relpos = wheel.RaycastInfo.ContactPointWS - RigidBody.CenterOfMassPosition;
 
                 chassis_velocity_at_contactPoint = RigidBody.GetVelocityInLocalPoint(relpos);
 
-                float projVel = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
+                Scalar projVel = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
 
                 if (denominator >= -0.1f)
                 {
@@ -287,7 +294,7 @@ namespace BulletSharp
                 }
                 else
                 {
-                    float inv = -1.0f / denominator;
+                    Scalar inv = -1.0f / denominator;
                     wheel.SuspensionRelativeVelocity = projVel * inv;
                     wheel.ClippedInvContactDotSuspension = inv;
                 }
@@ -318,9 +325,9 @@ namespace BulletSharp
 	        }
         }
 
-        private void ResolveSingleBilateral(RigidBody body1, Vector3 pos1, RigidBody body2, Vector3 pos2, float distance, Vector3 normal, ref float impulse, float timeStep)
+        private void ResolveSingleBilateral(RigidBody body1, Vector3 pos1, RigidBody body2, Vector3 pos2, Scalar distance, Vector3 normal, ref Scalar impulse, Scalar timeStep)
         {
-            float normalLenSqr = normal.LengthSquared;
+            Scalar normalLenSqr = normal.LengthSquared;
             Debug.Assert(System.Math.Abs(normalLenSqr) < 1.1f);
             if (normalLenSqr > 1.1f)
             {
@@ -340,34 +347,34 @@ namespace BulletSharp
             Vector3 m_bJ = Vector3.TransformCoordinate(Vector3.Cross(rel_pos2, -normal), world2B);
             Vector3 m_0MinvJt = body1.InvInertiaDiagLocal * m_aJ;
             Vector3 m_1MinvJt = body2.InvInertiaDiagLocal * m_bJ;
-            float dot0, dot1;
+            Scalar dot0, dot1;
             Vector3.Dot(ref m_0MinvJt, ref m_aJ, out dot0);
             Vector3.Dot(ref m_1MinvJt, ref m_bJ, out dot1);
-            float jacDiagAB = body1.InvMass + dot0 + body2.InvMass + dot1;
-            float jacDiagABInv = 1.0f / jacDiagAB;
+            Scalar jacDiagAB = body1.InvMass + dot0 + body2.InvMass + dot1;
+            Scalar jacDiagABInv = 1.0f / jacDiagAB;
 
-            float rel_vel;
+            Scalar rel_vel;
             Vector3.Dot(ref normal, ref vel, out rel_vel);
 
             //todo: move this into proper structure
-            const float contactDamping = 0.2f;
+            const Scalar contactDamping = 0.2f;
 
 #if ONLY_USE_LINEAR_MASS
-	        float massTerm = 1.0f / (body1.InvMass + body2.InvMass);
+	        Scalar massTerm = 1.0f / (body1.InvMass + body2.InvMass);
 	        impulse = - contactDamping * rel_vel * massTerm;
 #else
-            float velocityImpulse = -contactDamping * rel_vel * jacDiagABInv;
+            Scalar velocityImpulse = -contactDamping * rel_vel * jacDiagABInv;
             impulse = velocityImpulse;
 #endif
         }
 
-        public void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep)
+        public void UpdateAction(CollisionWorld collisionWorld, Scalar deltaTimeStep)
         {
             UpdateVehicle(deltaTimeStep);
         }
 
-        const float sideFrictionStiffness2 = 1.0f;
-        public void UpdateFriction(float timeStep)
+        const Scalar sideFrictionStiffness2 = 1.0f;
+        public void UpdateFriction(Scalar timeStep)
         {
             //calculate the impulse, so that the wheels don't move sidewards
             int numWheel = NumWheels;
@@ -406,7 +413,7 @@ namespace BulletSharp
                         wheelTrans[2, indexRightAxis]);
 
                     Vector3 surfNormalWS = wheel.RaycastInfo.ContactNormalWS;
-                    float proj;
+                    Scalar proj;
                     Vector3.Dot(ref axle[i], ref surfNormalWS, out proj);
                     axle[i] -= surfNormalWS * proj;
                     axle[i].Normalize();
@@ -422,8 +429,8 @@ namespace BulletSharp
                 }
             }
 
-            const float sideFactor = 1.0f;
-            const float fwdFactor = 0.5f;
+            const Scalar sideFactor = 1.0f;
+            const Scalar fwdFactor = 0.5f;
 
             bool sliding = false;
 
@@ -432,7 +439,7 @@ namespace BulletSharp
                 WheelInfo wheel = wheelInfo[i];
                 RigidBody groundObject = wheel.RaycastInfo.GroundObject as RigidBody;
 
-                float rollingFriction = 0.0f;
+                Scalar rollingFriction = 0.0f;
 
                 if (groundObject != null)
                 {
@@ -442,8 +449,8 @@ namespace BulletSharp
                     }
                     else
                     {
-                        float defaultRollingFrictionImpulse = 0.0f;
-                        float maxImpulse = (wheel.Brake != 0) ? wheel.Brake : defaultRollingFrictionImpulse;
+                        Scalar defaultRollingFrictionImpulse = 0.0f;
+                        Scalar maxImpulse = (wheel.Brake != 0) ? wheel.Brake : defaultRollingFrictionImpulse;
                         rollingFriction = CalcRollingFriction(chassisBody, groundObject, wheel.RaycastInfo.ContactPointWS, forwardWS[i], maxImpulse);
                     }
                 }
@@ -457,24 +464,24 @@ namespace BulletSharp
                 {
                     wheelInfo[i].SkidInfo = 1.0f;
 
-                    float maximp = wheel.WheelsSuspensionForce * timeStep * wheel.FrictionSlip;
-                    float maximpSide = maximp;
+                    Scalar maximp = wheel.WheelsSuspensionForce * timeStep * wheel.FrictionSlip;
+                    Scalar maximpSide = maximp;
 
-                    float maximpSquared = maximp * maximpSide;
+                    Scalar maximpSquared = maximp * maximpSide;
 
 
                     forwardImpulse[i] = rollingFriction;//wheel.EngineForce* timeStep;
 
-                    float x = forwardImpulse[i] * fwdFactor;
-                    float y = sideImpulse[i] * sideFactor;
+                    Scalar x = forwardImpulse[i] * fwdFactor;
+                    Scalar y = sideImpulse[i] * sideFactor;
 
-                    float impulseSquared = (x * x + y * y);
+                    Scalar impulseSquared = (x * x + y * y);
 
                     if (impulseSquared > maximpSquared)
                     {
                         sliding = true;
 
-                        float factor = maximp / (float)System.Math.Sqrt(impulseSquared);
+                        Scalar factor = maximp / (Scalar)System.Math.Sqrt(impulseSquared);
 
                         wheelInfo[i].SkidInfo *= factor;
                     }
@@ -524,7 +531,7 @@ namespace BulletSharp
                         RigidBody.CenterOfMassTransform.Row1[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row2[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row3[indexUpAxis]);
-                    float dot;
+                    Scalar dot;
                     Vector3.Dot(ref vChassisWorldUp, ref rel_pos, out dot);
                     rel_pos -= vChassisWorldUp * (dot * (1.0f - wheel.RollInfluence));
 #else
@@ -538,9 +545,9 @@ namespace BulletSharp
             }
         }
 
-        public void UpdateSuspension(float step)
+        public void UpdateSuspension(Scalar step)
         {
-            float chassisMass = 1.0f / chassisBody.InvMass;
+            Scalar chassisMass = 1.0f / chassisBody.InvMass;
 
             for (int w_it = 0; w_it < NumWheels; w_it++)
             {
@@ -548,13 +555,13 @@ namespace BulletSharp
 
                 if (wheel_info.RaycastInfo.IsInContact)
                 {
-                    float force;
+                    Scalar force;
                     //	Spring
                     {
-                        float susp_length = wheel_info.SuspensionRestLength;
-                        float current_length = wheel_info.RaycastInfo.SuspensionLength;
+                        Scalar susp_length = wheel_info.SuspensionRestLength;
+                        Scalar current_length = wheel_info.RaycastInfo.SuspensionLength;
 
-                        float length_diff = (susp_length - current_length);
+                        Scalar length_diff = (susp_length - current_length);
 
                         force = wheel_info.SuspensionStiffness
                             * length_diff * wheel_info.ClippedInvContactDotSuspension;
@@ -562,9 +569,9 @@ namespace BulletSharp
 
                     // Damper
                     {
-                        float projected_rel_vel = wheel_info.SuspensionRelativeVelocity;
+                        Scalar projected_rel_vel = wheel_info.SuspensionRelativeVelocity;
                         {
-                            float susp_damping;
+                            Scalar susp_damping;
                             if (projected_rel_vel < 0.0f)
                             {
                                 susp_damping = wheel_info.WheelsDampingCompression;
@@ -591,7 +598,7 @@ namespace BulletSharp
             }
         }
 
-        public void UpdateVehicle(float step)
+        public void UpdateVehicle(Scalar step)
         {
             for (int i = 0; i < wheelInfo.Length; i++)
             {
@@ -615,7 +622,7 @@ namespace BulletSharp
             // Simulate suspension
             for (int i = 0; i < wheelInfo.Length; i++)
             {
-                //float depth = 
+                //Scalar depth = 
                 RayCast(wheelInfo[i]);
             }
 
@@ -627,7 +634,7 @@ namespace BulletSharp
                 //apply suspension force
                 WheelInfo wheel = wheelInfo[i];
 
-                float suspensionForce = wheel.WheelsSuspensionForce;
+                Scalar suspensionForce = wheel.WheelsSuspensionForce;
 
                 if (suspensionForce > wheel.MaxSuspensionForce)
                 {
@@ -657,10 +664,10 @@ namespace BulletSharp
                         chassisWorldTransform[1, indexForwardAxis],
                         chassisWorldTransform[2, indexForwardAxis]);
 
-                    float proj = Vector3.Dot(fwd, wheel.RaycastInfo.ContactNormalWS);
+                    Scalar proj = Vector3.Dot(fwd, wheel.RaycastInfo.ContactNormalWS);
                     fwd -= wheel.RaycastInfo.ContactNormalWS * proj;
 
-                    float proj2;
+                    Scalar proj2;
                     Vector3.Dot(ref fwd, ref vel, out proj2);
 
                     wheel.DeltaRotation = (proj2 * step) / (wheel.WheelsRadius);

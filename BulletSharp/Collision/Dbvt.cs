@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class DbvtAabbMm
@@ -13,7 +20,7 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public int Classify(Vector3 n, float o, int s)
+		public int Classify(Vector3 n, Scalar o, int s)
 		{
 			return btDbvtAabbMm_Classify(Native, ref n, o, s);
 		}
@@ -33,7 +40,7 @@ namespace BulletSharp
 			return btDbvtAabbMm_FromCE(ref c, ref e);
 		}
 
-		public static DbvtAabbMm FromCR(Vector3 c, float r)
+		public static DbvtAabbMm FromCR(Vector3 c, Scalar r)
 		{
 			return btDbvtAabbMm_FromCR(ref c, r);
 		}
@@ -53,7 +60,7 @@ namespace BulletSharp
 			return btDbvtAabbMm_FromPoints2(ref pts, n);
 		}
 		*/
-		public float ProjectMinimum(Vector3 v, uint signs)
+		public Scalar ProjectMinimum(Vector3 v, uint signs)
 		{
 			return btDbvtAabbMm_ProjectMinimum(Native, ref v, signs);
 		}
@@ -298,7 +305,7 @@ namespace BulletSharp
 				btDbvt_ICollide_Process2(Native, __unnamed0.Native);
 			}
 
-			public void Process(DbvtNode n, float __unnamed1)
+			public void Process(DbvtNode n, Scalar __unnamed1)
 			{
 				btDbvt_ICollide_Process3(Native, n.Native, __unnamed1);
 			}
@@ -551,7 +558,7 @@ namespace BulletSharp
 				Native = btDbvt_sStkNPS_new();
 			}
 
-			public StkNps(DbvtNode n, uint m, float v)
+			public StkNps(DbvtNode n, uint m, Scalar v)
 			{
 				Native = btDbvt_sStkNPS_new2(n.Native, m, v);
 			}
@@ -572,7 +579,7 @@ namespace BulletSharp
 				set => btDbvt_sStkNPS_setNode(Native, (value != null) ? value.Native : IntPtr.Zero);
 			}
 
-			public float Value
+			public Scalar Value
 			{
 				get => btDbvt_sStkNPS_getValue(Native);
 				set => btDbvt_sStkNPS_setValue(Native, value);
@@ -632,21 +639,21 @@ namespace BulletSharp
 			btDbvt_clone2(Native, dest.Native, iclone.Native);
 		}
 		/*
-		public static void CollideKdop(DbvtNode root, Vector3 normals, float offsets,
+		public static void CollideKdop(DbvtNode root, Vector3 normals, Scalar offsets,
 			int count, ICollide policy)
 		{
 			btDbvt_collideKDOP(root.Native, normals.Native, offsets.Native, count,
 				policy.Native);
 		}
 
-		public static void CollideOcl(DbvtNode root, Vector3 normals, float offsets,
+		public static void CollideOcl(DbvtNode root, Vector3 normals, Scalar offsets,
 			Vector3 sortaxis, int count, ICollide policy)
 		{
 			btDbvt_collideOCL(root.Native, normals.Native, offsets.Native, ref sortaxis,
 				count, policy.Native);
 		}
 
-		public static void CollideOcl(DbvtNode root, Vector3 normals, float offsets,
+		public static void CollideOcl(DbvtNode root, Vector3 normals, Scalar offsets,
 			Vector3 sortaxis, int count, ICollide policy, bool fullsort)
 		{
 			btDbvt_collideOCL2(root.Native, normals.Native, offsets.Native, ref sortaxis,
@@ -727,7 +734,7 @@ namespace BulletSharp
 			return btDbvt_maxdepth(node.Native);
 		}
 
-		public static int Nearest(int[] i, StkNps a, float v, int l, int h)
+		public static int Nearest(int[] i, StkNps a, Scalar v, int l, int h)
 		{
 			return btDbvt_nearest(i, a.Native, v, l, h);
 		}
@@ -759,7 +766,7 @@ namespace BulletSharp
 		}
 
 		public void RayTestInternal(DbvtNode root, Vector3 rayFrom, Vector3 rayTo,
-			Vector3 rayDirectionInverse, UIntArray signs, float lambdaMax, Vector3 aabbMin,
+			Vector3 rayDirectionInverse, UIntArray signs, Scalar lambdaMax, Vector3 aabbMin,
 			Vector3 aabbMax, ICollide policy)
 		{
 			btDbvt_rayTestInternal2(Native, root.Native, ref rayFrom, ref rayTo,
@@ -787,7 +794,7 @@ namespace BulletSharp
 			btDbvt_update3(Native, leaf.Native, lookahead);
 		}
 
-		public bool Update(DbvtNode leaf, DbvtVolume volume, float margin)
+		public bool Update(DbvtNode leaf, DbvtVolume volume, Scalar margin)
 		{
 			return btDbvt_update4(Native, leaf.Native, volume.Native, margin);
 		}
@@ -797,7 +804,7 @@ namespace BulletSharp
 			return btDbvt_update5(Native, leaf.Native, volume.Native, ref velocity);
 		}
 
-		public bool Update(DbvtNode leaf, DbvtVolume volume, Vector3 velocity, float margin)
+		public bool Update(DbvtNode leaf, DbvtVolume volume, Vector3 velocity, Scalar margin)
 		{
 			return btDbvt_update6(Native, leaf.Native, volume.Native, ref velocity,
 				margin);

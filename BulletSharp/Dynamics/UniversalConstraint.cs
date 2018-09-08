@@ -1,6 +1,13 @@
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class UniversalConstraint : Generic6DofConstraint
@@ -14,12 +21,12 @@ namespace BulletSharp
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public void SetLowerLimit(float ang1min, float ang2min)
+		public void SetLowerLimit(Scalar ang1min, Scalar ang2min)
 		{
 			btUniversalConstraint_setLowerLimit(Native, ang1min, ang2min);
 		}
 
-		public void SetUpperLimit(float ang1max, float ang2max)
+		public void SetUpperLimit(Scalar ang1max, Scalar ang2max)
 		{
 			btUniversalConstraint_setUpperLimit(Native, ang1max, ang2max);
 		}
@@ -44,9 +51,9 @@ namespace BulletSharp
 			}
 		}
 
-		public float Angle1 => btUniversalConstraint_getAngle1(Native);
+		public Scalar Angle1 => btUniversalConstraint_getAngle1(Native);
 
-		public float Angle2 => btUniversalConstraint_getAngle2(Native);
+		public Scalar Angle2 => btUniversalConstraint_getAngle2(Native);
 
 		public Vector3 Axis1
 		{

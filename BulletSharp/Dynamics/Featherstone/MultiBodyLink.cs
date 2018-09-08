@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum FeatherstoneJointType
@@ -44,7 +51,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void SetAxisBottom(int dof, float x, float y, float z)
+		public void SetAxisBottom(int dof, Scalar x, Scalar y, Scalar z)
 		{
 			btMultibodyLink_setAxisBottom(Native, dof, x, y, z);
 		}
@@ -54,7 +61,7 @@ namespace BulletSharp
 			btMultibodyLink_setAxisBottom2(Native, dof, ref axis);
 		}
 
-		public void SetAxisTop(int dof, float x, float y, float z)
+		public void SetAxisTop(int dof, Scalar x, Scalar y, Scalar z)
 		{
 			btMultibodyLink_setAxisTop(Native, dof, x, y, z);
 		}
@@ -64,7 +71,7 @@ namespace BulletSharp
 			btMultibodyLink_setAxisTop2(Native, dof, ref axis);
 		}
 
-		public void UpdateCacheMultiDof(float[] pq = null)
+		public void UpdateCacheMultiDof(Scalar[] pq = null)
 		{
 			btMultibodyLink_updateCacheMultiDof(Native, pq);
 		}
@@ -226,7 +233,7 @@ namespace BulletSharp
 			set => btMultibodyLink_setInertiaLocal(Native, ref value);
 		}
 
-		public float JointDamping
+		public Scalar JointDamping
 		{
 			get => btMultibodyLink_getJointDamping(Native);
 			set => btMultibodyLink_setJointDamping(Native, value);
@@ -242,7 +249,7 @@ namespace BulletSharp
 			}
 		}
 		*/
-		public float JointFriction
+		public Scalar JointFriction
 		{
 			get => btMultibodyLink_getJointFriction(Native);
 			set => btMultibodyLink_setJointFriction(Native, value);
@@ -276,7 +283,7 @@ namespace BulletSharp
 			set { btMultibodyLink_setLinkName(_native, value._native); }
 		}
 		*/
-		public float Mass
+		public Scalar Mass
 		{
 			get => btMultibodyLink_getMass(Native);
 			set => btMultibodyLink_setMass(Native, value);

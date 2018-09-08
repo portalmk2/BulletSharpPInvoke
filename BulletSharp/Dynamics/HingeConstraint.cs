@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	[Flags]
@@ -57,18 +64,18 @@ namespace BulletSharp
 			_rigidBodyB = GetFixedBody();
 		}
 
-		public void EnableAngularMotor(bool enableMotor, float targetVelocity, float maxMotorImpulse)
+		public void EnableAngularMotor(bool enableMotor, Scalar targetVelocity, Scalar maxMotorImpulse)
 		{
 			btHingeConstraint_enableAngularMotor(Native, enableMotor, targetVelocity,
 				maxMotorImpulse);
 		}
 
-		public float GetHingeAngleRef(ref Matrix transA, ref Matrix transB)
+		public Scalar GetHingeAngleRef(ref Matrix transA, ref Matrix transB)
 		{
 			return btHingeConstraint_getHingeAngle(Native, ref transA, ref transB);
 		}
 
-		public float GetHingeAngle(Matrix transA, Matrix transB)
+		public Scalar GetHingeAngle(Matrix transA, Matrix transB)
 		{
 			return btHingeConstraint_getHingeAngle(Native, ref transA, ref transB);
 		}
@@ -119,39 +126,39 @@ namespace BulletSharp
 			btHingeConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(float low, float high)
+		public void SetLimit(Scalar low, Scalar high)
 		{
 			btHingeConstraint_setLimit(Native, low, high);
 		}
 
-		public void SetLimit(float low, float high, float softness)
+		public void SetLimit(Scalar low, Scalar high, Scalar softness)
 		{
 			btHingeConstraint_setLimit2(Native, low, high, softness);
 		}
 
-		public void SetLimit(float low, float high, float softness, float biasFactor)
+		public void SetLimit(Scalar low, Scalar high, Scalar softness, Scalar biasFactor)
 		{
 			btHingeConstraint_setLimit3(Native, low, high, softness, biasFactor);
 		}
 
-		public void SetLimit(float low, float high, float softness, float biasFactor,
-			float relaxationFactor)
+		public void SetLimit(Scalar low, Scalar high, Scalar softness, Scalar biasFactor,
+			Scalar relaxationFactor)
 		{
 			btHingeConstraint_setLimit4(Native, low, high, softness, biasFactor,
 				relaxationFactor);
 		}
 
-		public void SetMotorTarget(float targetAngle, float deltaTime)
+		public void SetMotorTarget(Scalar targetAngle, Scalar deltaTime)
 		{
 			btHingeConstraint_setMotorTarget(Native, targetAngle, deltaTime);
 		}
 
-		public void SetMotorTargetRef(ref Quaternion qAinB, float deltaTime)
+		public void SetMotorTargetRef(ref Quaternion qAinB, Scalar deltaTime)
 		{
 			btHingeConstraint_setMotorTarget2(Native, ref qAinB, deltaTime);
 		}
 
-		public void SetMotorTarget(Quaternion qAinB, float deltaTime)
+		public void SetMotorTarget(Quaternion qAinB, Scalar deltaTime)
 		{
 			btHingeConstraint_setMotorTarget2(Native, ref qAinB, deltaTime);
 		}
@@ -166,7 +173,7 @@ namespace BulletSharp
 			btHingeConstraint_testLimit(Native, ref transA, ref transB);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(Scalar timeStep)
 		{
 			btHingeConstraint_updateRHS(Native, timeStep);
 		}
@@ -227,29 +234,29 @@ namespace BulletSharp
 
 		public bool HasLimit => btHingeConstraint_hasLimit(Native);
 
-		public float HingeAngle => btHingeConstraint_getHingeAngle2(Native);
+		public Scalar HingeAngle => btHingeConstraint_getHingeAngle2(Native);
 
-		public float LimitBiasFactor => btHingeConstraint_getLimitBiasFactor(Native);
+		public Scalar LimitBiasFactor => btHingeConstraint_getLimitBiasFactor(Native);
 
-		public float LimitRelaxationFactor => btHingeConstraint_getLimitRelaxationFactor(Native);
+		public Scalar LimitRelaxationFactor => btHingeConstraint_getLimitRelaxationFactor(Native);
 
-		public float LimitSign => btHingeConstraint_getLimitSign(Native);
+		public Scalar LimitSign => btHingeConstraint_getLimitSign(Native);
 
-		public float LimitSoftness => btHingeConstraint_getLimitSoftness(Native);
+		public Scalar LimitSoftness => btHingeConstraint_getLimitSoftness(Native);
 
-		public float LowerLimit => btHingeConstraint_getLowerLimit(Native);
+		public Scalar LowerLimit => btHingeConstraint_getLowerLimit(Native);
 
-		public float MaxMotorImpulse
+		public Scalar MaxMotorImpulse
 		{
 			get => btHingeConstraint_getMaxMotorImpulse(Native);
 			set => btHingeConstraint_setMaxMotorImpulse(Native, value);
 		}
 
-		public float MotorTargetVelocity => btHingeConstraint_getMotorTargetVelocity(Native);
+		public Scalar MotorTargetVelocity => btHingeConstraint_getMotorTargetVelocity(Native);
 
 		public int SolveLimit => btHingeConstraint_getSolveLimit(Native);
 
-		public float UpperLimit => btHingeConstraint_getUpperLimit(Native);
+		public Scalar UpperLimit => btHingeConstraint_getUpperLimit(Native);
 
 		public bool UseFrameOffset
 		{
@@ -302,7 +309,7 @@ namespace BulletSharp
 			_rigidBodyB = GetFixedBody();
 		}
 
-		public float AccumulatedHingeAngle
+		public Scalar AccumulatedHingeAngle
 		{
 			get => btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(Native);
 			set => btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(Native, value);
@@ -318,13 +325,13 @@ namespace BulletSharp
 		public int UseReferenceFrameA;
 		public int AngularOnly;
 		public int EnableAngularMotor;
-		public float MotorTargetVelocity;
-		public float MaxMotorImpulse;
-		public float LowerLimit;
-		public float UpperLimit;
-		public float LimitSoftness;
-		public float BiasFactor;
-		public float RelaxationFactor;
+		public Scalar MotorTargetVelocity;
+		public Scalar MaxMotorImpulse;
+		public Scalar LowerLimit;
+		public Scalar UpperLimit;
+		public Scalar LimitSoftness;
+		public Scalar BiasFactor;
+		public Scalar RelaxationFactor;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(HingeConstraintFloatData), fieldName).ToInt32(); }
 	}

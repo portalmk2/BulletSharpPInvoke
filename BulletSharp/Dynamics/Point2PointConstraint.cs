@@ -3,6 +3,13 @@ using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	[Flags]
@@ -22,19 +29,19 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public float Damping
+		public Scalar Damping
 		{
 			get => btConstraintSetting_getDamping(Native);
 			set => btConstraintSetting_setDamping(Native, value);
 		}
 
-		public float ImpulseClamp
+		public Scalar ImpulseClamp
 		{
 			get => btConstraintSetting_getImpulseClamp(Native);
 			set => btConstraintSetting_setImpulseClamp(Native, value);
 		}
 
-		public float Tau
+		public Scalar Tau
 		{
 			get => btConstraintSetting_getTau(Native);
 			set => btConstraintSetting_setTau(Native, value);
@@ -70,7 +77,7 @@ namespace BulletSharp
 				ref body1Trans);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(Scalar timeStep)
 		{
 			btPoint2PointConstraint_updateRHS(Native, timeStep);
 		}

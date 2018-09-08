@@ -2,6 +2,13 @@ using System;
 using System.Collections.Generic;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public enum DispatchFunc
@@ -25,13 +32,13 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public float AllowedCcdPenetration
+		public Scalar AllowedCcdPenetration
 		{
 			get => btDispatcherInfo_getAllowedCcdPenetration(Native);
 			set => btDispatcherInfo_setAllowedCcdPenetration(Native, value);
 		}
 
-		public float ConvexConservativeDistanceThreshold
+		public Scalar ConvexConservativeDistanceThreshold
 		{
 			get => btDispatcherInfo_getConvexConservativeDistanceThreshold(Native);
 			set => btDispatcherInfo_setConvexConservativeDistanceThreshold(Native, value);
@@ -74,13 +81,13 @@ namespace BulletSharp
 			set => btDispatcherInfo_setStepCount(Native, value);
 		}
 
-		public float TimeOfImpact
+		public Scalar TimeOfImpact
 		{
 			get => btDispatcherInfo_getTimeOfImpact(Native);
 			set => btDispatcherInfo_setTimeOfImpact(Native, value);
 		}
 
-		public float TimeStep
+		public Scalar TimeStep
 		{
 			get => btDispatcherInfo_getTimeStep(Native);
 			set => btDispatcherInfo_setTimeStep(Native, value);

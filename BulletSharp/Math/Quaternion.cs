@@ -27,6 +27,13 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Globalization;
 
+#if BT_USE_DOUBLE_PRECISION
+    using Scalar = System.Double;
+#else
+    using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp.Math
 {
     /// <summary>
@@ -40,7 +47,7 @@ namespace BulletSharp.Math
         /// <summary>
         /// The size of the <see cref="SlimMath.Quaternion"/> type, in bytes.
         /// </summary>
-        public const int SizeInBytes = 4 * sizeof(float);
+        public const int SizeInBytes = 4 * sizeof(Scalar);
 
         /// <summary>
         /// A <see cref="SlimMath.Quaternion"/> with all of its components set to zero.
@@ -60,28 +67,28 @@ namespace BulletSharp.Math
         /// <summary>
         /// The X component of the quaternion.
         /// </summary>
-        public float X;
+        public Scalar X;
 
         /// <summary>
         /// The Y component of the quaternion.
         /// </summary>
-        public float Y;
+        public Scalar Y;
 
         /// <summary>
         /// The Z component of the quaternion.
         /// </summary>
-        public float Z;
+        public Scalar Z;
 
         /// <summary>
         /// The W component of the quaternion.
         /// </summary>
-        public float W;
+        public Scalar W;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
-        public Quaternion(float value)
+        public Quaternion(Scalar value)
         {
             X = value;
             Y = value;
@@ -106,14 +113,14 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
         /// <param name="angle">Initial value for the angle of the quaternion.</param>
-        public Quaternion(Vector3 axis, float angle)
+        public Quaternion(Vector3 axis, Scalar angle)
         {
-            float angle2 = angle * 0.5f;
-            float s = (float)System.Math.Sin(angle2) / axis.Length;
+            Scalar angle2 = angle * 0.5f;
+            Scalar s = (Scalar)System.Math.Sin(angle2) / axis.Length;
             X = axis.X * s;
             Y = axis.Y * s;
             Z = axis.Z * s;
-            W = (float)System.Math.Cos(angle2);
+            W = (Scalar)System.Math.Cos(angle2);
         }
 
         /// <summary>
@@ -123,7 +130,7 @@ namespace BulletSharp.Math
         /// <param name="y">Initial value for the Y component of the quaternion.</param>
         /// <param name="z">Initial value for the Z component of the quaternion.</param>
         /// <param name="w">Initial value for the W component of the quaternion.</param>
-        public Quaternion(float x, float y, float z, float w)
+        public Quaternion(Scalar x, Scalar y, Scalar z, Scalar w)
         {
             X = x;
             Y = y;
@@ -137,7 +144,7 @@ namespace BulletSharp.Math
         /// <param name="values">The values to assign to the X, Y, Z, and W components of the quaternion. This must be an array with four elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> contains more or less than four elements.</exception>
-        public Quaternion(float[] values)
+        public Quaternion(Scalar[] values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
@@ -173,15 +180,15 @@ namespace BulletSharp.Math
         /// Gets the angle of the quaternion.
         /// </summary>
         /// <value>The quaternion's angle.</value>
-        public float Angle
+        public Scalar Angle
         {
             get
             {
-                float length = (X * X) + (Y * Y) + (Z * Z);
+                Scalar length = (X * X) + (Y * Y) + (Z * Z);
                 if (length < Utilities.ZeroTolerance)
                     return 0.0f;
 
-                return (float)(2.0 * System.Math.Acos(W));
+                return (Scalar)(2.0 * System.Math.Acos(W));
             }
         }
 
@@ -193,7 +200,7 @@ namespace BulletSharp.Math
         {
             get
             {
-                float inv = 1.0f / (W * W);
+                Scalar inv = 1.0f / (W * W);
                 if (inv < 10.0f * Utilities.ZeroTolerance)
                     return Vector3.UnitX;
 
@@ -208,9 +215,9 @@ namespace BulletSharp.Math
         /// <see cref="SlimMath.Quaternion.LengthSquared"/> may be preferred when only the relative length is needed
         /// and speed is of the essence.
         /// </remarks>
-        public float Length
+        public Scalar Length
         {
-            get { return (float)System.Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
+            get { return (Scalar)System.Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
         }
 
         /// <summary>
@@ -220,7 +227,7 @@ namespace BulletSharp.Math
         /// This property may be preferred to <see cref="SlimMath.Quaternion.Length"/> when only a relative length is needed
         /// and speed is of the essence.
         /// </remarks>
-        public float LengthSquared
+        public Scalar LengthSquared
         {
             get { return (X * X) + (Y * Y) + (Z * Z) + (W * W); }
         }
@@ -232,7 +239,7 @@ namespace BulletSharp.Math
         /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, 2 for the Z component, and 3 for the W component.</param>
         /// <returns>The value of the component at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 3].</exception>
-        public float this[int index]
+        public Scalar this[int index]
         {
             get
             {
@@ -294,7 +301,7 @@ namespace BulletSharp.Math
         /// </summary>
         public void Invert()
         {
-            float lengthSq = LengthSquared;
+            Scalar lengthSq = LengthSquared;
             if (lengthSq > Utilities.ZeroTolerance)
             {
                 lengthSq = 1.0f / lengthSq;
@@ -311,10 +318,10 @@ namespace BulletSharp.Math
         /// </summary>
         public void Normalize()
         {
-            float length = Length;
+            Scalar length = Length;
             if (length > Utilities.ZeroTolerance)
             {
-                float inverse = 1.0f / length;
+                Scalar inverse = 1.0f / length;
                 X *= inverse;
                 Y *= inverse;
                 Z *= inverse;
@@ -342,9 +349,9 @@ namespace BulletSharp.Math
         /// Creates an array containing the elements of the quaternion.
         /// </summary>
         /// <returns>A four-element array containing the components of the quaternion.</returns>
-        public float[] ToArray()
+        public Scalar[] ToArray()
         {
-            return new float[] { X, Y, Z, W };
+            return new Scalar[] { X, Y, Z, W };
         }
 
         /// <summary>
@@ -407,7 +414,7 @@ namespace BulletSharp.Math
         /// <param name="value">The quaternion to scale.</param>
         /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <param name="result">When the method completes, contains the scaled quaternion.</param>
-        public static void Multiply(ref Quaternion value, float scalar, out Quaternion result)
+        public static void Multiply(ref Quaternion value, Scalar scalar, out Quaternion result)
         {
             result.X = value.X * scalar;
             result.Y = value.Y * scalar;
@@ -421,7 +428,7 @@ namespace BulletSharp.Math
         /// <param name="value">The quaternion to scale.</param>
         /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion Multiply(Quaternion value, float scalar)
+        public static Quaternion Multiply(Quaternion value, Scalar scalar)
         {
             Quaternion result;
             Multiply(ref value, scalar, out result);
@@ -436,14 +443,14 @@ namespace BulletSharp.Math
         /// <param name="result">When the moethod completes, contains the modulated quaternion.</param>
         public static void Multiply(ref Quaternion left, ref Quaternion right, out Quaternion result)
         {
-            float lx = left.X;
-            float ly = left.Y;
-            float lz = left.Z;
-            float lw = left.W;
-            float rx = right.X;
-            float ry = right.Y;
-            float rz = right.Z;
-            float rw = right.W;
+            Scalar lx = left.X;
+            Scalar ly = left.Y;
+            Scalar lz = left.Z;
+            Scalar lw = left.W;
+            Scalar rx = right.X;
+            Scalar ry = right.Y;
+            Scalar rz = right.Z;
+            Scalar rw = right.W;
 
             result.X = (rx * lw + lx * rw + ry * lz) - (rz * ly);
             result.Y = (ry * lw + ly * rw + rz * lx) - (rx * lz);
@@ -470,7 +477,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Quaternion value, float scalar, out Quaternion result)
+        public static void Divide(ref Quaternion value, Scalar scalar, out Quaternion result)
         {
             result = new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -481,7 +488,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Quaternion Divide(Quaternion value, float scalar)
+        public static Quaternion Divide(Quaternion value, Scalar scalar)
         {
             return new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -520,7 +527,7 @@ namespace BulletSharp.Math
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <param name="result">When the method completes, contains a new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</param>
-        public static void Barycentric(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, float amount1, float amount2, out Quaternion result)
+        public static void Barycentric(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, Scalar amount1, Scalar amount2, out Quaternion result)
         {
             Quaternion start, end;
             Slerp(ref value1, ref value2, amount1 + amount2, out start);
@@ -537,7 +544,7 @@ namespace BulletSharp.Math
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <returns>A new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</returns>
-        public static Quaternion Barycentric(Quaternion value1, Quaternion value2, Quaternion value3, float amount1, float amount2)
+        public static Quaternion Barycentric(Quaternion value1, Quaternion value2, Quaternion value3, Scalar amount1, Scalar amount2)
         {
             Quaternion result;
             Barycentric(ref value1, ref value2, ref value3, amount1, amount2, out result);
@@ -575,7 +582,7 @@ namespace BulletSharp.Math
         /// <param name="left">First source quaternion.</param>
         /// <param name="right">Second source quaternion.</param>
         /// <param name="result">When the method completes, contains the dot product of the two quaternions.</param>
-        public static void Dot(ref Quaternion left, ref Quaternion right, out float result)
+        public static void Dot(ref Quaternion left, ref Quaternion right, out Scalar result)
         {
             result = (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
@@ -586,7 +593,7 @@ namespace BulletSharp.Math
         /// <param name="left">First source quaternion.</param>
         /// <param name="right">Second source quaternion.</param>
         /// <returns>The dot product of the two quaternions.</returns>
-        public static float Dot(Quaternion left, Quaternion right)
+        public static Scalar Dot(Quaternion left, Quaternion right)
         {
             return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
@@ -598,12 +605,12 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains the exponentiated quaternion.</param>
         public static void Exponential(ref Quaternion value, out Quaternion result)
         {
-            float angle = (float)System.Math.Sqrt((value.X * value.X) + (value.Y * value.Y) + (value.Z * value.Z));
-            float sin = (float)System.Math.Sin(angle);
+            Scalar angle = (Scalar)System.Math.Sqrt((value.X * value.X) + (value.Y * value.Y) + (value.Z * value.Z));
+            Scalar sin = (Scalar)System.Math.Sin(angle);
 
             if (System.Math.Abs(sin) >= Utilities.ZeroTolerance)
             {
-                float coeff = sin / angle;
+                Scalar coeff = sin / angle;
                 result.X = coeff * value.X;
                 result.Y = coeff * value.Y;
                 result.Z = coeff * value.Z;
@@ -613,7 +620,7 @@ namespace BulletSharp.Math
                 result = value;
             }
 
-            result.W = (float)System.Math.Cos(angle);
+            result.W = (Scalar)System.Math.Cos(angle);
         }
 
         /// <summary>
@@ -663,9 +670,9 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static void Lerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
+        public static void Lerp(ref Quaternion start, ref Quaternion end, Scalar amount, out Quaternion result)
         {
-            float inverse = 1.0f - amount;
+            Scalar inverse = 1.0f - amount;
 
             if (Dot(start, end) >= 0.0f)
             {
@@ -697,7 +704,7 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static Quaternion Lerp(Quaternion start, Quaternion end, float amount)
+        public static Quaternion Lerp(Quaternion start, Quaternion end, Scalar amount)
         {
             Quaternion result;
             Lerp(ref start, ref end, amount, out result);
@@ -713,12 +720,12 @@ namespace BulletSharp.Math
         {
             if (System.Math.Abs(value.W) < 1.0f)
             {
-                float angle = (float)System.Math.Acos(value.W);
-                float sin = (float)System.Math.Sin(angle);
+                Scalar angle = (Scalar)System.Math.Acos(value.W);
+                Scalar sin = (Scalar)System.Math.Sin(angle);
 
                 if (System.Math.Abs(sin) >= Utilities.ZeroTolerance)
                 {
-                    float coeff = angle / sin;
+                    Scalar coeff = angle / sin;
                     result.X = value.X * coeff;
                     result.Y = value.Y * coeff;
                     result.Z = value.Z * coeff;
@@ -786,14 +793,14 @@ namespace BulletSharp.Math
         /// <param name="axis">The axis of rotation.</param>
         /// <param name="angle">The angle of rotation.</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void RotationAxis(ref Vector3 axis, float angle, out Quaternion result)
+        public static void RotationAxis(ref Vector3 axis, Scalar angle, out Quaternion result)
         {
             Vector3 normalized;
             Vector3.Normalize(ref axis, out normalized);
 
-            float half = angle * 0.5f;
-            float sin = (float)System.Math.Sin(half);
-            float cos = (float)System.Math.Cos(half);
+            Scalar half = angle * 0.5f;
+            Scalar sin = (Scalar)System.Math.Sin(half);
+            Scalar cos = (Scalar)System.Math.Cos(half);
 
             result.X = normalized.X * sin;
             result.Y = normalized.Y * sin;
@@ -807,7 +814,7 @@ namespace BulletSharp.Math
         /// <param name="axis">The axis of rotation.</param>
         /// <param name="angle">The angle of rotation.</param>
         /// <returns>The newly created quaternion.</returns>
-        public static Quaternion RotationAxis(Vector3 axis, float angle)
+        public static Quaternion RotationAxis(Vector3 axis, Scalar angle)
         {
             Quaternion result;
             RotationAxis(ref axis, angle, out result);
@@ -821,13 +828,13 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
         public static void RotationMatrix(ref Matrix matrix, out Quaternion result)
         {
-            float sqrt;
-            float half;
-            float scale = matrix.M11 + matrix.M22 + matrix.M33;
+            Scalar sqrt;
+            Scalar half;
+            Scalar scale = matrix.M11 + matrix.M22 + matrix.M33;
 
             if (scale > 0.0f)
             {
-                sqrt = (float)System.Math.Sqrt(scale + 1.0f);
+                sqrt = (Scalar)System.Math.Sqrt(scale + 1.0f);
                 result.W = sqrt * 0.5f;
                 sqrt = 0.5f / sqrt;
 
@@ -837,7 +844,7 @@ namespace BulletSharp.Math
             }
             else if ((matrix.M11 >= matrix.M22) && (matrix.M11 >= matrix.M33))
             {
-                sqrt = (float)System.Math.Sqrt(1.0f + matrix.M11 - matrix.M22 - matrix.M33);
+                sqrt = (Scalar)System.Math.Sqrt(1.0f + matrix.M11 - matrix.M22 - matrix.M33);
                 half = 0.5f / sqrt;
 
                 result.X = 0.5f * sqrt;
@@ -847,7 +854,7 @@ namespace BulletSharp.Math
             }
             else if (matrix.M22 > matrix.M33)
             {
-                sqrt = (float)System.Math.Sqrt(1.0f + matrix.M22 - matrix.M11 - matrix.M33);
+                sqrt = (Scalar)System.Math.Sqrt(1.0f + matrix.M22 - matrix.M11 - matrix.M33);
                 half = 0.5f / sqrt;
 
                 result.X = (matrix.M21 + matrix.M12) * half;
@@ -857,7 +864,7 @@ namespace BulletSharp.Math
             }
             else
             {
-                sqrt = (float)System.Math.Sqrt(1.0f + matrix.M33 - matrix.M11 - matrix.M22);
+                sqrt = (Scalar)System.Math.Sqrt(1.0f + matrix.M33 - matrix.M11 - matrix.M22);
                 half = 0.5f / sqrt;
 
                 result.X = (matrix.M31 + matrix.M13) * half;
@@ -886,18 +893,18 @@ namespace BulletSharp.Math
         /// <param name="pitch">The pitch of rotation.</param>
         /// <param name="roll">The roll of rotation.</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void RotationYawPitchRoll(float yaw, float pitch, float roll, out Quaternion result)
+        public static void RotationYawPitchRoll(Scalar yaw, Scalar pitch, Scalar roll, out Quaternion result)
         {
-            float halfRoll = roll * 0.5f;
-            float halfPitch = pitch * 0.5f;
-            float halfYaw = yaw * 0.5f;
+            Scalar halfRoll = roll * 0.5f;
+            Scalar halfPitch = pitch * 0.5f;
+            Scalar halfYaw = yaw * 0.5f;
 
-            float sinRoll = (float)System.Math.Sin(halfRoll);
-            float cosRoll = (float)System.Math.Cos(halfRoll);
-            float sinPitch = (float)System.Math.Sin(halfPitch);
-            float cosPitch = (float)System.Math.Cos(halfPitch);
-            float sinYaw = (float)System.Math.Sin(halfYaw);
-            float cosYaw = (float)System.Math.Cos(halfYaw);
+            Scalar sinRoll = (Scalar)System.Math.Sin(halfRoll);
+            Scalar cosRoll = (Scalar)System.Math.Cos(halfRoll);
+            Scalar sinPitch = (Scalar)System.Math.Sin(halfPitch);
+            Scalar cosPitch = (Scalar)System.Math.Cos(halfPitch);
+            Scalar sinYaw = (Scalar)System.Math.Sin(halfYaw);
+            Scalar cosYaw = (Scalar)System.Math.Cos(halfYaw);
 
             result.X = (cosYaw * sinPitch * cosRoll) + (sinYaw * cosPitch * sinRoll);
             result.Y = (sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll);
@@ -912,7 +919,7 @@ namespace BulletSharp.Math
         /// <param name="pitch">The pitch of rotation.</param>
         /// <param name="roll">The roll of rotation.</param>
         /// <returns>The newly created quaternion.</returns>
-        public static Quaternion RotationYawPitchRoll(float yaw, float pitch, float roll)
+        public static Quaternion RotationYawPitchRoll(Scalar yaw, Scalar pitch, Scalar roll)
         {
             Quaternion result;
             RotationYawPitchRoll(yaw, pitch, roll, out result);
@@ -926,11 +933,11 @@ namespace BulletSharp.Math
         /// <param name="end">End quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <param name="result">When the method completes, contains the spherical linear interpolation of the two quaternions.</param>
-        public static void Slerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
+        public static void Slerp(ref Quaternion start, ref Quaternion end, Scalar amount, out Quaternion result)
         {
-            float opposite;
-            float inverse;
-            float dot = Dot(start, end);
+            Scalar opposite;
+            Scalar inverse;
+            Scalar dot = Dot(start, end);
 
             if (System.Math.Abs(dot) > 1.0f - Utilities.ZeroTolerance)
             {
@@ -939,11 +946,11 @@ namespace BulletSharp.Math
             }
             else
             {
-                float acos = (float)System.Math.Acos(System.Math.Abs(dot));
-                float invSin = (float)(1.0f / System.Math.Sin(acos));
+                Scalar acos = (Scalar)System.Math.Acos(System.Math.Abs(dot));
+                Scalar invSin = (Scalar)(1.0f / System.Math.Sin(acos));
 
-                inverse = (float)System.Math.Sin((1.0f - amount) * acos) * invSin;
-                opposite = (float)System.Math.Sin(amount * acos) * invSin * System.Math.Sign(dot);
+                inverse = (Scalar)System.Math.Sin((1.0f - amount) * acos) * invSin;
+                opposite = (Scalar)System.Math.Sin(amount * acos) * invSin * System.Math.Sign(dot);
             }
 
             result.X = (inverse * start.X) + (opposite * end.X);
@@ -959,7 +966,7 @@ namespace BulletSharp.Math
         /// <param name="end">End quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <returns>The spherical linear interpolation of the two quaternions.</returns>
-        public static Quaternion Slerp(Quaternion start, Quaternion end, float amount)
+        public static Quaternion Slerp(Quaternion start, Quaternion end, Scalar amount)
         {
             Quaternion result;
             Slerp(ref start, ref end, amount, out result);
@@ -975,7 +982,7 @@ namespace BulletSharp.Math
         /// <param name="value4">Fourth source quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of interpolation.</param>
         /// <param name="result">When the method completes, contains the spherical quadrangle interpolation of the quaternions.</param>
-        public static void Squad(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, ref Quaternion value4, float amount, out Quaternion result)
+        public static void Squad(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, ref Quaternion value4, Scalar amount, out Quaternion result)
         {
             Quaternion start, end;
             Slerp(ref value1, ref value4, amount, out start);
@@ -992,7 +999,7 @@ namespace BulletSharp.Math
         /// <param name="value4">Fourth source quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of interpolation.</param>
         /// <returns>The spherical quadrangle interpolation of the quaternions.</returns>
-        public static Quaternion Squad(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4, float amount)
+        public static Quaternion Squad(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4, Scalar amount)
         {
             Quaternion result;
             Squad(ref value1, ref value2, ref value3, ref value4, amount, out result);
@@ -1085,7 +1092,7 @@ namespace BulletSharp.Math
         /// <param name="value">The quaternion to scale.</param>
         /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(float scalar, Quaternion value)
+        public static Quaternion operator *(Scalar scalar, Quaternion value)
         {
             Quaternion result;
             Multiply(ref value, scalar, out result);
@@ -1098,7 +1105,7 @@ namespace BulletSharp.Math
         /// <param name="value">The quaternion to scale.</param>
         /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(Quaternion value, float scalar)
+        public static Quaternion operator *(Quaternion value, Scalar scalar)
         {
             Quaternion result;
             Multiply(ref value, scalar, out result);
@@ -1139,7 +1146,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Quaternion operator /(Quaternion value, float scalar)
+        public static Quaternion operator /(Quaternion value, Scalar scalar)
         {
             return new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -1253,12 +1260,12 @@ namespace BulletSharp.Math
         /// <returns>
         /// <c>true</c> if the specified <see cref="SlimMath.Quaternion"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Quaternion other, float epsilon)
+        public bool Equals(Quaternion other, Scalar epsilon)
         {
-            return ((float)System.Math.Abs(other.X - X) < epsilon &&
-                (float)System.Math.Abs(other.Y - Y) < epsilon &&
-                (float)System.Math.Abs(other.Z - Z) < epsilon &&
-                (float)System.Math.Abs(other.W - W) < epsilon);
+            return ((Scalar)System.Math.Abs(other.X - X) < epsilon &&
+                (Scalar)System.Math.Abs(other.Y - Y) < epsilon &&
+                (Scalar)System.Math.Abs(other.Z - Z) < epsilon &&
+                (Scalar)System.Math.Abs(other.W - W) < epsilon);
         }
 
         /// <summary>
@@ -1319,7 +1326,7 @@ namespace BulletSharp.Math
         /// <returns>The result of the conversion.</returns>
         public static explicit operator Quaternion(System.Windows.Media.Media3D.Quaternion value)
         {
-            return new Quaternion((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+            return new Quaternion((Scalar)value.X, (Scalar)value.Y, (Scalar)value.Z, (Scalar)value.W);
         }
 #endif
 

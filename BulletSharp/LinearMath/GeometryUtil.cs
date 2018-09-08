@@ -2,12 +2,19 @@ using BulletSharp.Math;
 using System.Collections.Generic;
 using System.Linq;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public static class GeometryUtil
 	{
-		public static bool AreVerticesBehindPlane(Vector3 planeNormal, float planeConstant, IEnumerable<Vector3> vertices,
-			float margin)
+		public static bool AreVerticesBehindPlane(Vector3 planeNormal, Scalar planeConstant, IEnumerable<Vector3> vertices,
+			Scalar margin)
 		{
 			return vertices.All(v => planeNormal.Dot(v) + planeConstant <= margin);
 		}
@@ -33,7 +40,7 @@ namespace BulletSharp
 							normal.Normalize();
 							if (!Vector4EnumerableContainsVector3(planeEquations, normal))
 							{
-								float constant = -normal.Dot(vertexArray[i]);
+								Scalar constant = -normal.Dot(vertexArray[i]);
 								if (AreVerticesBehindPlane(normal, constant, vertexArray, 0.01f))
 								{
 									planeEquations.Add(new Vector4(normal, constant));
@@ -43,7 +50,7 @@ namespace BulletSharp
 							normal = -normal;
 							if (!Vector4EnumerableContainsVector3(planeEquations, normal))
 							{
-								float constant = -normal.Dot(vertexArray[i]);
+								Scalar constant = -normal.Dot(vertexArray[i]);
 								if (AreVerticesBehindPlane(normal, constant, vertexArray, 0.01f))
 								{
 									planeEquations.Add(new Vector4(normal, constant));
@@ -69,7 +76,7 @@ namespace BulletSharp
 		{
 			int numPlanes = planeEquations.Count;
 			Vector3[] planeNormals = new Vector3[numPlanes];
-			float[] planeConstants = new float[numPlanes];
+			Scalar[] planeConstants = new Scalar[numPlanes];
 			int i = 0;
 			foreach (Vector4 plane in planeEquations)
 			{
@@ -100,7 +107,7 @@ namespace BulletSharp
 							//P = ------------------------------------------------
 							//	N1 . ( N2 * N3 )  
 
-							float quotient = planeNormals[i].Dot(n2n3);
+							Scalar quotient = planeNormals[i].Dot(n2n3);
 							if (System.Math.Abs(quotient) > 0.000001)
 							{
 								quotient = -1.0f / quotient;
@@ -124,7 +131,7 @@ namespace BulletSharp
 		}
 
 		public static bool IsPointInsidePlanes(IEnumerable<Vector4> planeEquations,
-			Vector3 point, float margin)
+			Vector3 point, Scalar margin)
 		{
 			return planeEquations.All(p => new Vector3(p.X, p.Y, p.Z).Dot(point) + p.W <= margin);
 		}

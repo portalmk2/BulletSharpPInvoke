@@ -2,13 +2,20 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class PolarDecomposition : IDisposable
 	{
 		internal IntPtr _native;
 
-		public PolarDecomposition(float tolerance = 0.0001f, int maxIterations = 16)
+		public PolarDecomposition(Scalar tolerance = 0.0001f, int maxIterations = 16)
 		{
 			_native = btPolarDecomposition_new(tolerance, (uint)maxIterations);
 		}

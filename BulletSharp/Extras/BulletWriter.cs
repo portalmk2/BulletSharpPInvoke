@@ -2,6 +2,13 @@
 using System.IO;
 using BulletSharp.Math;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
     class BulletWriter : BinaryWriter
@@ -11,7 +18,7 @@ namespace BulletSharp
         {
         }
 
-        public void Write(float value, int position)
+        public void Write(Scalar value, int position)
         {
             BaseStream.Position = position;
             Write(value);

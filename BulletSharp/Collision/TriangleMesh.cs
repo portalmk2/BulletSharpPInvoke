@@ -2,6 +2,13 @@ using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class TriangleMesh : TriangleIndexVertexArray
@@ -56,7 +63,7 @@ namespace BulletSharp
 
 		public bool Use4ComponentVertices => btTriangleMesh_getUse4componentVertices(Native);
 
-		public float WeldingThreshold
+		public Scalar WeldingThreshold
 		{
 			get => btTriangleMesh_getWeldingThreshold(Native);
 			set => btTriangleMesh_setWeldingThreshold(Native, value);

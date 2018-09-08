@@ -4,6 +4,13 @@ using NUnit.Framework;
 using System.Reflection;
 using System.IO;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharpTest
 {
     [TestFixture]

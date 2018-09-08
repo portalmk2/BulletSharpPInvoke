@@ -4,6 +4,13 @@ using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
+#if BT_USE_DOUBLE_PRECISION
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+
 namespace BulletSharp
 {
 	public class QuantizedBvhNode : IDisposable
@@ -273,7 +280,7 @@ namespace BulletSharp
 		}
 
 		public void SetQuantizationValues(Vector3 bvhAabbMin, Vector3 bvhAabbMax,
-			float quantizationMargin = 1.0f)
+			Scalar quantizationMargin = 1.0f)
 		{
 			btQuantizedBvh_setQuantizationValues(_native, ref bvhAabbMin, ref bvhAabbMax,
 				quantizationMargin);
